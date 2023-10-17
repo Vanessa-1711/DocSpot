@@ -39,6 +39,7 @@ class LoginController extends Controller
         return view('auth.register');
     }
 
+    
     /**
      * Create a new controller instance.
      *
