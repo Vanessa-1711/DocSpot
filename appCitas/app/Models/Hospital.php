@@ -16,4 +16,10 @@ class Hospital extends Model
         'tipo',
         'user_id',
     ];
+
+    public function user()
+    {
+        return $this->hasMany(User::class, 'user_id');
+    }
+
 }

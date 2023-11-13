@@ -17,4 +17,9 @@ class Paciente extends Model
         'fecha_nacimiento',
         'user_id',
     ];
+    public function user()
+    {
+        return $this->belongsTo(Medico::class, 'user_id');
+    }
+
 }

@@ -18,4 +18,13 @@ class Medico extends Model
         'hospital_id',
         'user_id',
     ];
+
+    public function hospital()
+    {
+        return $this->hasMany(Hospital::class, 'hospital_id');
+    }
+    public function paciente()
+    {
+        return $this->hasMany(User::class, 'user_id');
+    }
 }
