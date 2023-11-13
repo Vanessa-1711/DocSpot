@@ -12,6 +12,8 @@
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 -->
+@extends('layouts.app')
+
 <!DOCTYPE html>
 <html lang="en">
 
