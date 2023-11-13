@@ -50,6 +50,31 @@
          <div class="col-lg-6 bg-white"  >
           <div class="rounded p-4" style="background-color: #87CEFA; border-radius: 15px; height:100%">
             <!-- Contenido dentro del div celeste -->
+            <div class="card" style="margin-top: 12%">
+              <div class="card-body">
+              <form role="form" action="{{route('login')}}" method="POST" novalidate>
+                  <div class="mb-3 justify-center">
+                    <h5 class="card-title text-center">Login</h5>
+                  </div>
+                  <div class="mb-3">
+                    <label for="username" class="form-label">Username </label>
+                    <input type="text" class="form-control" id="username" placeholder="Username ">
+                  </div>
+                  <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" class="form-control" aria-describedby="passwordHelpBlock">
+                  </div>
+                  <div class="mb-3 d-flex justify-center align-center">
+                    <button type="submit" class="btn btn-primary">Log In</button>
+                  </div>
+                  </form>
+                  @if(session('mensaje'))
+                    <p class="bg-red-500 text-white my-2 rounded-lg text-sm p-2 text-center">
+                      {{session('mensaje')}}
+                    </p>
+                    @endif
+              </div>
+            </div>
           </div>
         </div>
       </div>

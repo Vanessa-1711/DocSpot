@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\LoginController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,3 +19,6 @@ Route::get('/', function () {
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/login', [App\Http\Controllers\HomeController::class, 'login'])->name('login');
+
+//Rutas para el login
+Route::post('/login', [LoginController::class, 'store']);
