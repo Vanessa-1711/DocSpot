@@ -19,7 +19,7 @@ class Paciente extends Model
     ];
     public function user()
     {
-        return $this->belongsTo(Medico::class, 'user_id');
+        return $this->belongsTo(Medico::class, 'rol_id');
     }
 
 }
