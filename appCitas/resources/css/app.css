@@ -1,0 +1,23 @@
+
+.split-screen {
+    display: flex;
+    width: 100%;
+    height: 100vh; /* O ajusta la altura según sea necesario */
+}
+.left-half {
+    width: 50%;
+    background-size: cover;
+    background-position: center;
+}
+.right-half {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form-container {
+    width: 100%;
+    max-width: 400px; /* Ajusta según sea necesario */
+    padding: 20px;
+    margin: auto;
+}

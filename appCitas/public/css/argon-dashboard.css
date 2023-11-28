@@ -4,6 +4,8 @@
  * Copyright 2011-2022 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+
+
 :root {
   --bs-blue: #63B3ED;
   --bs-indigo: #596CFF;
@@ -27,7 +29,7 @@
   --bs-gray-700: #495057;
   --bs-gray-800: #343a40;
   --bs-gray-900: #212529;
-  --bs-primary: #5e72e4;
+  --bs-primary: #418CA7;
   --bs-secondary: #8392ab;
   --bs-success: #2dce89;
   --bs-info: #11cdef;
@@ -10580,7 +10582,7 @@ fieldset:disabled .btn {
 }
 
 .bg-primary {
-  background-color: #5e72e4 !important;
+  background-color: #418CA7 !important;
 }
 
 .bg-secondary {
@@ -20386,13 +20388,14 @@ fieldset:disabled .btn {
 
 .btn-primary:hover,
 .btn.bg-gradient-primary:hover {
-  background-color: #5e72e4;
-  border-color: #5e72e4;
+  background-color: #fff;
+  border-color: #74c2c7;
+  color:black;
 }
 
 .btn-primary .btn.bg-outline-primary,
 .btn.bg-gradient-primary .btn.bg-outline-primary {
-  border: 1px solid #5e72e4;
+  border: 1px solid #74c2c7;
 }
 
 .btn-primary:not(:disabled):not(.disabled).active,
@@ -20401,8 +20404,8 @@ fieldset:disabled .btn {
 .btn.bg-gradient-primary:not(:disabled):not(.disabled).active,
 .btn.bg-gradient-primary:not(:disabled):not(.disabled):active,
 .show>.btn.bg-gradient-primary.dropdown-toggle {
-  color: color-yiq(#5e72e4);
-  background-color: #5e72e4;
+  color:black;
+  background-color: #fff;
 }
 
 .btn-primary.focus,
@@ -20728,12 +20731,12 @@ fieldset:disabled .btn {
 
 .btn-primary,
 .btn.bg-gradient-primary {
-  color: #fff;
+  color:black;
 }
 
 .btn-primary:hover,
 .btn.bg-gradient-primary:hover {
-  color: #fff;
+  color:black;
 }
 
 .btn-secondary,

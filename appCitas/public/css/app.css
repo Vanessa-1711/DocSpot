@@ -1,0 +1,69 @@
+
+.split-screen {
+    display: flex;
+    width: 100%;
+    height: 100vh; /* O ajusta la altura según sea necesario */
+}
+.left-half {
+    width: 50%;
+    background-size: cover;
+    background-position: center;
+}
+.right-half {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form-container {
+    width: 100%;
+    max-width: 80%; /* Ajusta según sea necesario */
+    padding: 20px;
+    margin: auto;
+    background-color: #9FC9D7;
+    border-radius: 47px;
+}
+/* Añade esto dentro de tu etiqueta <head> si usas un archivo aparte de Tailwind */
+.form-input {
+    background: #EDF2F7; /* Color de fondo para los inputs */
+    border: 2px solid transparent; /* Borde transparente que se puede colorear en estado de error */
+    padding: 12px 16px; /* Espaciado interno */
+    border-radius: 8px; /* Bordes redondeados */
+    margin-bottom: 1rem; /* Espacio entre campos */
+}
+
+.form-input:focus {
+    outline: none; /* Quita el outline predeterminado */
+    border-color: #63b3ed; /* Borde azul claro cuando el input está enfocado */
+    box-shadow: 0 0 0 1px #63b3ed; /* Sombra para simular un efecto de "glow" */
+}
+
+.error-message {
+    color: #E53E3E; /* Color rojo para errores */
+    text-align: center; /* Centra el texto del error */
+    font-size: 0.875rem; /* Tamaño más pequeño para el mensaje de error */
+    margin-top: -0.5rem; /* Ajusta el espacio sobre el mensaje de error */
+    margin-bottom: 1rem; /* Ajusta el espacio debajo del mensaje de error */
+}
+
+
+
+.contenedorImagen{
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    
+}
+ 
+
+.centradoImagen{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+}
+
+.oscurecer-img{
+    filter: brightness(50%); 
+  }

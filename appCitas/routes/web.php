@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RegisterPacienteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,11 +17,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('layouts.app');
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/login', [App\Http\Controllers\HomeController::class, 'login'])->name('login');
 
 Route::get('/register',[RegisterController::class,'index'])->name('register');
-Route::get('/register/store',[RegisterController::class,'store'])->name('register.store');
+Route::get('/register/paciente',[RegisterPacienteController::class,'index'])->name('register_paciente');
+Route::post('/register/paciente/store',[RegisterPacienteController::class,'store'])->name('register.store');
+
+//Rutas para el login
+Route::post('/login', [LoginController::class, 'store']);
