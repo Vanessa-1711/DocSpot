@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PacienteController;
+use App\Http\Controllers\MedicoController;
+use App\Http\Controllers\HospitalController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,3 +25,10 @@ Route::get('/login', [App\Http\Controllers\HomeController::class, 'login'])->nam
 
 //Rutas para el login
 Route::post('/login', [LoginController::class, 'store']);
+
+Route::get('/paciente/dashboard', [PacienteController::class, 'index'])->name('paciente.dashboard');
+
+Route::get('/medico/dashboard', [MedicoController::class, 'index'])->name('medico.dashboard');
+
+Route::get('/hospital/dashboard', [HospitalController::class, 'index'])->name('hospital.dashboard');
+

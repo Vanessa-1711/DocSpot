@@ -20,8 +20,25 @@ class LoginController extends Controller
             return back()->withErrors(['mensaje' => 'Las credenciales son incorrectas'])->withInput();
         }
         
-        // Credenciales correctas
-        return view('dashboard');
+        $user = auth()->user();
+    
+        // Verificar el rol del usuario
+        if ($user->rol_id === 1) {
+            // Si el usuario tiene el rol_id 1, redireccionar a una vista específica
+            return redirect()->route('admin.dashboard');
+        } elseif ($user->paciente()->exists()) {
+            // Si el usuario está relacionado como paciente, redireccionar a una vista de pacientes
+            return redirect()->route('paciente.dashboard');
+        } elseif ($user->medico()->exists()) {
+            // Si el usuario está relacionado como médico, redireccionar a una vista de médicos
+            return redirect()->route('medico.dashboard');
+        } elseif ($user->hospital()->exists()) {
+            // Si el usuario está relacionado con un hospital, redireccionar a una vista de hospitales
+            return redirect()->route('hospital.dashboard');
+        } else {
+            // Si no se cumplen las condiciones anteriores, redireccionar a una vista por defecto
+            return back()->withErrors(['mensaje' => 'No puede acceder'])->withInput();
+        }
     }
     
 }
