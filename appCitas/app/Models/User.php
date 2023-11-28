@@ -25,6 +25,10 @@ class User extends Authenticatable
         'password',
         'rol_id',
     ];
+    public function paciente()
+    {
+        return $this->hasOne(Paciente::class);
+    }
 
     
     /**

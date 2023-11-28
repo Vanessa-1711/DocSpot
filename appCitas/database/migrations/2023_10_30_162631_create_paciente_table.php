@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('apellido');
-            $table->string('num_seguro');
+            $table->string('num_seguro')->nullable();
             $table->string('preferente');
             $table->date('fecha_nacimiento');
-            $table->string('user_id');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('horarios', function (Blueprint $table) {
             $table->id();
             $table->timestamp('hora_inicio');
-            $table->timestamp('hora_fin');
+            $table->timestamp('hora_fin')->nullable();
             $table->date('dia');
             $table->string('medico_id');
             $table->timestamps();

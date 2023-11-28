@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MainController;
-
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PacienteController;
+use App\Http\Controllers\MedicoController;
+use App\Http\Controllers\HospitalController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,4 +16,19 @@ use App\Http\Controllers\MainController;
 |
 */
 
-Route::get('/', [MainController::class, 'show']);
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/login', [App\Http\Controllers\HomeController::class, 'login'])->name('login');
+
+//Rutas para el login
+Route::post('/login', [LoginController::class, 'store']);
+
+Route::get('/paciente/dashboard', [PacienteController::class, 'index'])->name('paciente.dashboard');
+
+Route::get('/medico/dashboard', [MedicoController::class, 'index'])->name('medico.dashboard');
+
+Route::get('/hospital/dashboard', [HospitalController::class, 'index'])->name('hospital.dashboard');
+
