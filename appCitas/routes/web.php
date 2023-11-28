@@ -32,3 +32,4 @@ Route::get('/medico/dashboard', [MedicoController::class, 'index'])->name('medic
 
 Route::get('/hospital/dashboard', [HospitalController::class, 'index'])->name('hospital.dashboard');
 
+Route::get('/hospital/pacientes', [PacienteController::class, 'mostrarCarpetaPacientes'])->name('hospital.pacientes');
