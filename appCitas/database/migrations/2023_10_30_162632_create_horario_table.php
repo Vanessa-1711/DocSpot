@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamp('hora_inicio');
             $table->timestamp('hora_fin')->nullable();
-            $table->date('dia');
+            $table->string('dia');
             $table->string('medico_id');
             $table->timestamps();
         });

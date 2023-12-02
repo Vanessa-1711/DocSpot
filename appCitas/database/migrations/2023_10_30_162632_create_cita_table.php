@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->date('fecha');
             $table->timestamp('hora');
-            $table->string('estado');
+            $table->integer('estado');
             $table->string('medico_id');
             $table->string('paciente_id');
             $table->timestamps();

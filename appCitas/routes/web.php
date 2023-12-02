@@ -5,6 +5,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PacienteController;
 use App\Http\Controllers\MedicoController;
 use App\Http\Controllers\HospitalController;
+use App\Http\Controllers\HomeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,15 +17,12 @@ use App\Http\Controllers\HospitalController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index']);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/login', [App\Http\Controllers\HomeController::class, 'login'])->name('login');
+Route::get('/login', [App\Http\Controllers\HomeController::class, 'login']);
 
 //Rutas para el login
-Route::post('/login', [LoginController::class, 'store']);
+Route::post('/login', [LoginController::class, 'store'])->name('login');
 
 Route::get('/paciente/dashboard', [PacienteController::class, 'index'])->name('paciente.dashboard');
 
