@@ -32,3 +32,6 @@ Route::get('/medico/dashboard', [MedicoController::class, 'index'])->name('medic
 
 Route::get('/hospital/dashboard', [HospitalController::class, 'index'])->name('hospital.dashboard');
 
+Route::get('/app', function () {
+    return view('layouts.app');
+});
