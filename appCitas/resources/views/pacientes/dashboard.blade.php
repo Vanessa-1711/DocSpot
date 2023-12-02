@@ -6,6 +6,7 @@
     @include('layouts.aside_pacientes')
 @endsection
 
+
 @section('content')
 @endsection
 
