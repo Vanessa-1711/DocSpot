@@ -22343,11 +22343,11 @@ hr.horizontal.gray-light {
   border-radius: 0.125rem;
   position: relative;
   display: block;
-  height: 2px;
+  height: 3px;
 }
 
 .navbar .sidenav-toggler-inner .sidenav-toggler-line:not(:last-child) {
-  margin-bottom: 3px;
+  margin-bottom: 4px;
 }
 
 .g-sidenav-show.g-sidenav-pinned .navbar .sidenav-toggler-inner .sidenav-toggler-line:first-child,
@@ -23157,7 +23157,7 @@ hr.horizontal.gray-light {
 }
 
 .sidenav[data-color="success"] .navbar-nav>.nav-item>.nav-link.active {
-  background-image: linear-gradient(310deg, #2dce89 0%, #2dce89 100%);
+  background-color: #AECCD7;
 }
 
 .sidenav[data-color="success"] .navbar-nav>.nav-item>.nav-link.active .icon i,
