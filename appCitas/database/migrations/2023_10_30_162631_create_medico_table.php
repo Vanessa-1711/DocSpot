@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('apellido');
-            $table->double('latitud');
-            $table->double('longitud');
+            $table->double('latitud')->nullable();
+            $table->double('longitud')->nullable();
             $table->date('fecha_nacimiento');
-            $table->string('hospital_id');
+            $table->string('hospital_id')->nullable();
             $table->string('user_id');
             $table->timestamps();
         });
