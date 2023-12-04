@@ -17,8 +17,14 @@ class Paciente extends Model
         'fecha_nacimiento',
         'user_id',
     ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function citas()
+    {
+        return $this->hasMany(Citas::class, 'paciente_id');
     }
 }

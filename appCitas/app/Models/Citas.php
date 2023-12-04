@@ -16,4 +16,9 @@ class Citas extends Model
         'medico_id',
         'paciente_id',
     ];
+
+    public function medico()
+    {
+        return $this->belongsTo(Medico::class, 'medico_id');
+    }
 }
