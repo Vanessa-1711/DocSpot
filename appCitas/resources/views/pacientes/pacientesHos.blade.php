@@ -10,20 +10,20 @@
 @section('content')
 <div class="container-fluid py-5">
     <div class="row">
-      @foreach($nombresHospitales as $nombre)
-          <div class="col-xl-3 col-md-4 col-sm-4 mb-4">
-              <div class="card" style="background-color: #9FC9D7;">
-                  <div class="card-body text-center">
-                      <h4 class="card-title mb-3 text-white">{{ $nombre }}</h4>
-                      <img src="https://img.freepik.com/vector-premium/edificio-hospital-ilustracion-vector-fondo-dibujos-animados-atencion-medica-ambulancia-medico-paciente-enfermeras-exterior-clinica-medica_2175-1510.jpg?w=2000" class="card-img-top rounded" style="border-radius: 15px;" alt="Hospital Image">
-                      <div class="card-btn mt-2">
-                          <a href="#" class="btn btn-primary text-white" style="background-color: #42A8A1;">Ver más</a>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      @endforeach
-  </div>
+        @foreach($nombresHospitales as $nombre)
+            <div class="col-xl-3 col-md-4 col-sm-4 mb-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h4 class="card-title mb-3" style="color: #52A0AE;">{{ $nombre }}</h4>
+                        <img src="https://img.freepik.com/vector-premium/edificio-hospital-ilustracion-vector-fondo-dibujos-animados-atencion-medica-ambulancia-medico-paciente-enfermeras-exterior-clinica-medica_2175-1510.jpg?w=2000" class="card-img-top rounded" style="border-radius: 15px;" alt="Hospital Image">
+                        <div class="card-btn mt-2">
+                            <a href="#" class="btn" type="submit" style="background-color: #42A8A1; color: #ffffff;"><i class="fas fa-eye"> </i> Ver más</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
 </div>
 @endsection
 
