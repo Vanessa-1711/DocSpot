@@ -35,8 +35,8 @@
           
           <!-- Botones "Sign In" y "Sign Up" a la derecha -->
           <div class="navbar-nav ml-auto">
-            <a class="btn btn-outline-primary m-2">Sign In</a>
-            <a href="{{route('login')}}" class="btn btn-primary m-2 bt-sign-up" style="color:white">Sign Up</a>
+            <a href="{{route('register')}}" class="btn btn-outline-primary m-2">Registrarse</a>
+            <a href="{{route('login')}}" class="btn btn-primary m-2 bt-sign-up" style="color:white">Iniciar Sesión</a>
           </div>
         </div>
       </nav>

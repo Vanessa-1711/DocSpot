@@ -18,4 +18,8 @@ class Hospital extends Model
         'tipo',
         'user_id',
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
