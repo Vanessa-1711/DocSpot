@@ -29,9 +29,9 @@ class LoginController extends Controller
         } elseif ($user->paciente()->exists()) {
             // Si el usuario está relacionado como paciente, redireccionar a una vista de pacientes
             return redirect()->route('paciente.dashboard');
-        } elseif ($user->medico()->exists()) {
-            // Si el usuario está relacionado como médico, redireccionar a una vista de médicos
-            return redirect()->route('medico.dashboard');
+        // } elseif ($user->medico()->exists()) {
+        //     // Si el usuario está relacionado como médico, redireccionar a una vista de médicos
+        //     return redirect()->route('medico.dashboard');
         } elseif ($user->hospital()->exists()) {
             // Si el usuario está relacionado con un hospital, redireccionar a una vista de hospitales
             return redirect()->route('hospital.dashboard');
