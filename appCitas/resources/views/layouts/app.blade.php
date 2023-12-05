@@ -12,6 +12,9 @@
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
   <script src="https://kit.fontawesome.com/047ae1fa88.js" crossorigin="anonymous"></script>
+  <!-- En tu plantilla principal dentro de <head> -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
+
   <!-- Nucleo Icons -->
   <link rel="stylesheet" href="{{asset('css/nucleo-icons.css')}}">
   <link rel="stylesheet" href="{{asset('css/nucleo-svg.css')}}">
@@ -64,7 +67,7 @@
     </nav>
 
     @yield('content')
-    
+    @stack('scripts')
   </main>
 
   <!--   Core JS Files   -->

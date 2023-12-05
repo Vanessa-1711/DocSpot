@@ -18,7 +18,33 @@ class PacienteController extends Controller
     
     public function index()
     {
-        return view('pacientes.dashboard');
+        $pacienteId = auth()->user()->id;
+
+        // Calcular cantidades para las tarjetas
+        $confirmadasPorRealizar = Citas::where('paciente_id', $pacienteId)
+                                       ->where('estado', 1)
+                                       ->where('fecha', '>', now())
+                                       ->count();
+        $noConfirmadas = Citas::where('paciente_id', $pacienteId)
+                              ->where('estado', 0)
+                              ->count();
+        $citasAtrasadas = Citas::where('paciente_id', $pacienteId)
+                               ->where('fecha', '<', now())
+                               ->where('estado', 0)
+                               ->count();
+
+        $citas = Citas::with('medico')
+                      ->where('paciente_id', $pacienteId)
+                      ->orderBy('fecha', 'asc')
+                      ->orderBy('hora', 'asc')
+                      ->get();
+
+        return view('pacientes.dashboard', [
+            'confirmadasPorRealizar' => $confirmadasPorRealizar,
+            'noConfirmadas' => $noConfirmadas,
+            'citasAtrasadas' => $citasAtrasadas,
+            'citas' => $citas
+        ]);
     }
 
     public function hospitales()
