@@ -46,26 +46,36 @@
             <div class="card text-center hover-float">
                 <div class="card-body">
                     <h5 class="card-title" style="color: #42A8A1;">Citas Confirmadas</h5>
-                    <p class="card-text">{{ $confirmadasPorRealizar }} citas</p>
+                    @if(isset($confirmadasPorRealizar) && $confirmadasPorRealizar > 0)
+                        <p class="card-text">{{ $confirmadasPorRealizar }} citas</p>
+                    @endif
                 </div>
             </div>
         </div>
+        
         <div class="col-md-4">
             <div class="card text-center hover-float">
                 <div class="card-body">
                     <h5 class="card-title" style="color: #42A8A1;">Citas No Confirmadas</h5>
-                    <p class="card-text">{{ $noConfirmadas }} citas</p>
+                    @if(isset($noConfirmadas) && $noConfirmadas > 0)
+                        <p class="card-text">{{ $noConfirmadas }} citas</p>
+                    @endif
                 </div>
             </div>
         </div>
+        
         <div class="col-md-4">
             <div class="card text-center hover-float">
                 <div class="card-body">
                     <h5 class="card-title" style="color: #42A8A1;">Citas Atrasadas</h5>
-                    <p class="card-text">{{ $citasAtrasadas }} citas</p>
+                    @if(isset($citasAtrasadas) && $citasAtrasadas > 0)
+                        <p class="card-text">{{ $citasAtrasadas }} citas</p>
+                    @endif
                 </div>
             </div>
         </div>
+        
+        
     </div>
 
     <div class="row mt-4">
@@ -82,8 +92,8 @@
                     font-weight: bold;
                     text-align: center;
                 }
-
             </style>
+           
             <table id="citasTable" class="table table-striped table-bordered" style="width:100%;">
                 <thead>
                     <tr>
@@ -93,8 +103,9 @@
                         <th>Estado</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach($citas as $cita)
+                @isset($citas)
+                <tbody> 
+                    @forelse($citas as $cita)
                         <tr>
                             <td class="text-center">{{ \Carbon\Carbon::parse($cita->fecha)->format('d/m/Y') }}</td>
                             <td class="text-center">{{ \Carbon\Carbon::parse($cita->hora)->format('g:i A') }}</td>
@@ -103,8 +114,13 @@
                                 {{ $cita->estado == 1 ? 'Confirmada' : 'Pendiente' }}
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="4" class="text-center">No hay citas disponibles</td>
+                        </tr>
+                    @endforelse
                 </tbody>
+                @endisset
             </table>
         </div>
     </div>
@@ -122,7 +138,6 @@
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <script>
         $(document).ready(function() {
             $('#citasTable').DataTable({
@@ -141,44 +156,52 @@
                     "<'row'<'col-sm-12'tr>>" + // Estructura de la tabla
                     "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>", // Estructura del infomation y pagination
             });
-
-            var ctx = document.getElementById('citasChart').getContext('2d');
-            var citasChart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: ['Citas Confirmadas', 'Citas Pendientes'],
-                    datasets: [{
-                        label: 'Resumen de Citas',
-                        data: [{{ $confirmadasPorRealizar }}, {{ $noConfirmadas }}],
-                        backgroundColor: [
-                            'rgba(54, 162, 235, 0.2)', // Azul
-                            '#52A0AE' // Color personalizado
-                        ],
-                        borderColor: [
-                            'rgba(54, 162, 235, 1)',
-                            '#52A0AE'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    tooltips: {
-                        callbacks: {
-                            label: function(tooltipItem, data) {
-                                var dataset = data.datasets[tooltipItem.datasetIndex];
-                                var total = dataset.data.reduce(function(previousValue, currentValue) {
-                                    return previousValue + currentValue;
-                                });
-                                var currentValue = dataset.data[tooltipItem.index];
-                                var percentage = Math.floor(((currentValue/total) * 100)+0.5);         
-                                return data.labels[tooltipItem.index] + ': ' + percentage + '%';
+            @isset($confirmadasPorRealizar, $noConfirmadas)
+                if({{ $confirmadasPorRealizar }} > 0 || {{ $noConfirmadas }} > 0) {
+                    
+                    var ctx = document.getElementById('citasChart').getContext('2d');
+                    var citasChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Citas Confirmadas', 'Citas Pendientes'],
+                        datasets: [{
+                            label: 'Resumen de Citas',
+                            data: [{{ $confirmadasPorRealizar }}, {{ $noConfirmadas }}],
+                            backgroundColor: [
+                                'rgba(54, 162, 235, 0.2)', // Azul
+                                '#52A0AE' // Color personalizado
+                            ],
+                            borderColor: [
+                                'rgba(54, 162, 235, 1)',
+                                '#52A0AE'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        tooltips: {
+                            callbacks: {
+                                label: function(tooltipItem, data) {
+                                    var dataset = data.datasets[tooltipItem.datasetIndex];
+                                    var total = dataset.data.reduce(function(previousValue, currentValue) {
+                                        return previousValue + currentValue;
+                                    });
+                                    var currentValue = dataset.data[tooltipItem.index];
+                                    var percentage = Math.floor(((currentValue/total) * 100)+0.5);         
+                                    return data.labels[tooltipItem.index] + ': ' + percentage + '%';
+                                }
                             }
                         }
                     }
-                }
-            });
+                });
+            } else {
+                        $('#citasChart').replaceWith('<p>No hay citas para mostrar en el gráfico.</p>');
+                    }
+            @else
+                $('#citasChart').replaceWith('<p>No hay citas para mostrar en el gráfico.</p>');
+            @endisset
         });
     </script>
 @endpush
