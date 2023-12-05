@@ -38,3 +38,6 @@ Route::get('/pacientes/{paciente}/citas', [PacienteController::class, 'citasPaci
 Route::post('/citas/{cita}/confirmar', [PacienteController::class, 'confirmarCita'])->name('citas.confirmar');
 Route::delete('/citas/{cita}/eliminar', [PacienteController::class, 'eliminarCita'])->name('citas.eliminar');
 
+
+Route::get('/citas/{cita}/editar', [PacienteController::class, 'editarCita'])->name('citas.editar');
+Route::put('/citas/{cita}', [PacienteController::class, 'actualizarCita'])->name('citas.actualizar');

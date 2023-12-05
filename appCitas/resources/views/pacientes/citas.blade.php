@@ -16,6 +16,10 @@
         margin-left: 5px;
         border-radius: 5px;
     }
+    .btn-custom-color {
+        background-color: #52A0AE;
+        color: white; /* Adjust text color if needed */
+    }
     .card-header-custom {
         border-bottom: 2px solid #9FC9D7;
     }
@@ -26,6 +30,10 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+    }
+    .btn-hover-white:hover {
+        background-color: white;
+        color: #000000; /* Cambia el color del texto al pasar el mouse, si es necesario */
     }
 </style>
 
@@ -53,10 +61,14 @@
                             @endif
                         </div>
                         <div class="d-flex justify-content-end">
-                            <form action="{{ route('citas.eliminar', $cita->id) }}" method="POST">
-                                @csrf
-                                <button type="submit" class="btn btn-hover" style="background-color: white;"><i class="fas fa-edit" style="color: #9FC9D7;"></i></button>
-                            </form>
+                            <button type="button" class="btn btn-hover" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#editarCitaModal"
+                                data-cita-id="{{ $cita->id }}"
+                                data-cita-fecha="{{ $cita->fecha }}"
+                                data-cita-hora="{{ $cita->hora }}">
+                                <i class="fas fa-edit" style="color: #9FC9D7;"></i>
+                            </button>
                             <!-- Formulario para confirmar la cita -->
                             @if($cita->estado == 0)
                                 <form action="{{ route('citas.confirmar', $cita->id) }}" method="POST">
@@ -79,111 +91,60 @@
         @endforelse
     </div>
 </div>
+
+<!-- Modal de edición de cita -->
+<div class="modal fade" id="editarCitaModal" tabindex="-1" aria-labelledby="editarCitaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarCitaModalLabel">Editar Cita</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{{ route('citas.actualizar', $cita->id) }}">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="fecha" class="form-label">Fecha de la cita</label>
+                        <input type="date" class="form-control" id="fecha" name="fecha" value="{{ $cita->fecha }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="hora" class="form-label">Hora de la cita</label>
+                        <input type="time" class="form-control" id="hora" name="hora"  value="{{ \Carbon\Carbon::parse($cita->hora)->format('H:i') }}">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-custom-color btn-hover-white" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary btn-custom-color">Actualizar Cita</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @endsection
 
-
-
-<!--   Core JS Files   -->
-<script src="{{asset('js/core/popper.min.js')}}"></script>
-<script src="{{asset('js/core/bootstrap.min.js')}}"></script>
-<script src="{{asset('js/plugins/perfect-scrollbar.min.js')}}"></script>
-<script src="{{asset('js/plugins/smooth-scrollbar.min.js')}}"></script>
-<script src="{{asset('js/plugins/chartjs.min.js')}}"></script>
-
-
+@push('scripts')
 <script>
-var ctx1 = document.getElementById("chart-line").getContext("2d");
-
-var gradientStroke1 = ctx1.createLinearGradient(0, 230, 0, 50);
-
-gradientStroke1.addColorStop(1, 'rgba(94, 114, 228, 0.2)');
-gradientStroke1.addColorStop(0.2, 'rgba(94, 114, 228, 0.0)');
-gradientStroke1.addColorStop(0, 'rgba(94, 114, 228, 0)');
-new Chart(ctx1, {
-  type: "line",
-  data: {
-    labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-    datasets: [{
-      label: "Mobile apps",
-      tension: 0.4,
-      borderWidth: 0,
-      pointRadius: 0,
-      borderColor: "#5e72e4",
-      backgroundColor: gradientStroke1,
-      borderWidth: 3,
-      fill: true,
-      data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
-      maxBarThickness: 6
-
-    }],
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: false,
-      }
-    },
-    interaction: {
-      intersect: false,
-      mode: 'index',
-    },
-    scales: {
-      y: {
-        grid: {
-          drawBorder: false,
-          display: true,
-          drawOnChartArea: true,
-          drawTicks: false,
-          borderDash: [5, 5]
-        },
-        ticks: {
-          display: true,
-          padding: 10,
-          color: '#fbfbfb',
-          font: {
-            size: 11,
-            family: "Open Sans",
-            style: 'normal',
-            lineHeight: 2
-          },
-        }
-      },
-      x: {
-        grid: {
-          drawBorder: false,
-          display: false,
-          drawOnChartArea: false,
-          drawTicks: false,
-          borderDash: [5, 5]
-        },
-        ticks: {
-          display: true,
-          color: '#ccc',
-          padding: 20,
-          font: {
-            size: 11,
-            family: "Open Sans",
-            style: 'normal',
-            lineHeight: 2
-          },
-        }
-      },
-    },
-  },
-});
+    document.addEventListener('DOMContentLoaded', function () {
+        var editarCitaModal = document.getElementById('editarCitaModal');
+    
+        editarCitaModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+    
+            var citaId = button.getAttribute('data-cita-id');
+            var citaFecha = button.getAttribute('data-cita-fecha');
+            var citaHora = button.getAttribute('data-cita-hora');
+    
+            var form = editarCitaModal.querySelector('form');
+            var inputFecha = editarCitaModal.querySelector('#fecha');
+            var inputHora = editarCitaModal.querySelector('#hora');
+    
+            form.action = `/citas/${citaId}`; // Corregido: ruta de actualización
+    
+            inputFecha.value = citaFecha;
+            inputHora.value = citaHora;
+        });
+    });
 </script>
-<script>
-var win = navigator.platform.indexOf('Win') > -1;
-if (win && document.querySelector('#sidenav-scrollbar')) {
-  var options = {
-    damping: '0.5'
-  }
-  Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
-}
-</script>
-<!-- Github buttons -->
-<script async defer src="https://buttons.github.io/buttons.js"></script>
-<!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
-<script src="{{asset('js/argon-dashboard.min.js?v=2.0.4')}}"></script>
+@endpush
