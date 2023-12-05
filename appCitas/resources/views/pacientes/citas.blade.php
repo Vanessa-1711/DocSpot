@@ -93,35 +93,36 @@
 </div>
 
 <!-- Modal de edición de cita -->
-<div class="modal fade" id="editarCitaModal" tabindex="-1" aria-labelledby="editarCitaModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editarCitaModalLabel">Editar Cita</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+@if($paciente->citas->isNotEmpty())
+    <div class="modal fade" id="editarCitaModal" tabindex="-1" aria-labelledby="editarCitaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarCitaModalLabel">Editar Cita</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="{{ route('citas.actualizar', $cita->id) }}">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="fecha" class="form-label">Fecha de la cita</label>
+                            <input type="date" class="form-control" id="fecha" name="fecha" value="{{ $cita->fecha }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="hora" class="form-label">Hora de la cita</label>
+                            <input type="time" class="form-control" id="hora" name="hora"  value="{{ \Carbon\Carbon::parse($cita->hora)->format('H:i') }}">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-custom-color btn-hover-white" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary btn-custom-color">Actualizar Cita</button>
+                    </div>
+                </form>
             </div>
-            <form method="POST" action="{{ route('citas.actualizar', $cita->id) }}">
-                @csrf
-                @method('PUT')
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="fecha" class="form-label">Fecha de la cita</label>
-                        <input type="date" class="form-control" id="fecha" name="fecha" value="{{ $cita->fecha }}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="hora" class="form-label">Hora de la cita</label>
-                        <input type="time" class="form-control" id="hora" name="hora"  value="{{ \Carbon\Carbon::parse($cita->hora)->format('H:i') }}">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-custom-color btn-hover-white" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary btn-custom-color">Actualizar Cita</button>
-                </div>
-            </form>
         </div>
     </div>
-</div>
-
+@endif
 @endsection
 
 @push('scripts')
