@@ -17,7 +17,10 @@ return new class extends Migration
             $table->string('curp')->unique();
             $table->string('nss')->unique();
             $table->foreignId('hospital_id')->constrained('hospitales');
-            $table->foreignId('paciente_id')->constrained('pacientes')->nullable();
+            $table->foreignId('paciente_id')->nullable()->constrained('pacientes');
+
+
+
         });
     }
 
