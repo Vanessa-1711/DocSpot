@@ -47,6 +47,11 @@ class PacienteController extends Controller
         ]);
     }
 
+    public function verMasHospital()
+    {
+        return view('pacientes.verMasHospital');
+    }
+
     public function hospitales()
     {
         $cantidadHospitales = Hospital::count();

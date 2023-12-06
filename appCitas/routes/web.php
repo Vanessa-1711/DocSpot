@@ -48,6 +48,10 @@ Route::get('/hospital/dashboard', [HospitalController::class, 'index'])->name('h
 Route::get('/hospital/pacientes', [PacienteController::class, 'hospitales'])->name('hospital.pacientes');
 Route::get('/pacientes/{paciente}/citas', [PacienteController::class, 'citasPaciente'])->name('pacientes.citas');
 
+Route::get('/pacientes/hospital/vermas', [PacienteController::class, 'verMasHospital'])->name('pacientes.vermas');
+
+
+
 // En web.php
 Route::post('/citas/{cita}/confirmar', [PacienteController::class, 'confirmarCita'])->name('citas.confirmar');
 Route::delete('/citas/{cita}/eliminar', [PacienteController::class, 'eliminarCita'])->name('citas.eliminar');
