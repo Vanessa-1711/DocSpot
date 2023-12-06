@@ -35,6 +35,7 @@
         background-color: white;
         color: #000000; /* Cambia el color del texto al pasar el mouse, si es necesario */
     }
+    
 </style>
 
 <div class="container-fluid py-5">
@@ -63,7 +64,7 @@
                         <div class="d-flex justify-content-end">
                             <button type="button" class="btn btn-hover" 
                                 data-bs-toggle="modal" 
-                                data-bs-target="#editarCitaModal"
+                                data-bs-target="#editarCitaModal{{ $cita->id }}"
                                 data-cita-id="{{ $cita->id }}"
                                 data-cita-fecha="{{ $cita->fecha }}"
                                 data-cita-hora="{{ $cita->hora }}">
@@ -73,14 +74,16 @@
                             @if($cita->estado == 0)
                                 <form action="{{ route('citas.confirmar', $cita->id) }}" method="POST">
                                     @csrf
-                                    <button type="submit" class="btn btn-hover" style="background-color: white;"><i class="fas fa-check" style="color: #9FC9D7;"></i></button>
+                                    <button type="submit" class="btn btn-hover" ><i class="fas fa-check" style="color: #9FC9D7;"></i></button>
                                 </form>
                             @endif
                             <!-- Formulario para eliminar la cita -->
-                            <form action="{{ route('citas.eliminar', $cita->id) }}" method="POST">
+                            <form action="{{ route('citas.eliminar', $cita->id) }}" method="POST" class="form-eliminar-cita">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-hover" style="background-color: white;"><i class="fas fa-trash-alt" style="color: #9FC9D7;"></i></button>
+                                <button type="button" class="btn btn-hover eliminar-cita-btn" >
+                                    <i class="fas fa-trash-alt" style="color: #9FC9D7;"></i>
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -93,12 +96,13 @@
 </div>
 
 <!-- Modal de edición de cita -->
-@if($paciente->citas->isNotEmpty())
-    <div class="modal fade" id="editarCitaModal" tabindex="-1" aria-labelledby="editarCitaModalLabel" aria-hidden="true">
+<!-- Modales de edición de cita para cada cita en la lista -->
+@foreach ($paciente->citas as $cita)
+    <div class="modal fade" id="editarCitaModal{{ $cita->id }}" tabindex="-1" aria-labelledby="editarCitaModalLabel{{ $cita->id }}" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editarCitaModalLabel">Editar Cita</h5>
+                    <h5 class="modal-title" id="editarCitaModalLabel{{ $cita->id }}">Editar Cita</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form method="POST" action="{{ route('citas.actualizar', $cita->id) }}">
@@ -106,12 +110,12 @@
                     @method('PUT')
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="fecha" class="form-label">Fecha de la cita</label>
-                            <input type="date" class="form-control" id="fecha" name="fecha" value="{{ $cita->fecha }}">
+                            <label for="fecha{{ $cita->id }}" class="form-label">Fecha de la cita</label>
+                            <input type="date" class="form-control" id="fecha{{ $cita->id }}" name="fecha" value="{{ $cita->fecha }}">
                         </div>
                         <div class="mb-3">
-                            <label for="hora" class="form-label">Hora de la cita</label>
-                            <input type="time" class="form-control" id="hora" name="hora"  value="{{ \Carbon\Carbon::parse($cita->hora)->format('H:i') }}">
+                            <label for="hora{{ $cita->id }}" class="form-label">Hora de la cita</label>
+                            <input type="time" class="form-control" id="hora{{ $cita->id }}" name="hora" value="{{ \Carbon\Carbon::parse($cita->hora)->format('H:i') }}">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -122,30 +126,52 @@
             </div>
         </div>
     </div>
-@endif
+@endforeach
+
 @endsection
 
 @push('scripts')
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var editarCitaModal = document.getElementById('editarCitaModal');
     
-        editarCitaModal.addEventListener('show.bs.modal', function (event) {
-            var button = event.relatedTarget;
-    
-            var citaId = button.getAttribute('data-cita-id');
-            var citaFecha = button.getAttribute('data-cita-fecha');
-            var citaHora = button.getAttribute('data-cita-hora');
-    
-            var form = editarCitaModal.querySelector('form');
-            var inputFecha = editarCitaModal.querySelector('#fecha');
-            var inputHora = editarCitaModal.querySelector('#hora');
-    
-            form.action = `/citas/${citaId}`; // Corregido: ruta de actualización
-    
-            inputFecha.value = citaFecha;
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.btn-editar-cita').forEach(button => {
+        button.addEventListener('click', function () {
+            const citaId = this.dataset.citaId;
+            
+            const modal = document.querySelector(`#editarCitaModal${citaId}`);
+            const form = modal.querySelector('form');
+            const inputFecha = form.querySelector(`#fecha${citaId}`);
+            const inputHora = form.querySelector(`#hora${citaId}`);
+
+        form.action = `/citas/${citaId}`;
+        inputFecha.value = citaFecha;
             inputHora.value = citaHora;
         });
     });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.eliminar-cita-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const form = this.closest('.form-eliminar-cita');
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Esta acción no se puede deshacer.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#42A8A1',
+                cancelButtonColor: '#677495',
+                confirmButtonText: 'Sí, eliminar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+});
 </script>
 @endpush

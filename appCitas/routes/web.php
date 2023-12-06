@@ -60,3 +60,11 @@ Route::delete('/citas/{cita}/eliminar', [PacienteController::class, 'eliminarCit
 
 Route::get('/citas/{cita}/editar', [PacienteController::class, 'editarCita'])->name('citas.editar');
 Route::put('/citas/{cita}', [PacienteController::class, 'actualizarCita'])->name('citas.actualizar');
+
+
+
+// Hospital
+Route::get('hospitales/asociar', [HospitalController::class, 'asociarVista'])->name('hospital.asociar');
+Route::get('hospitales/agregar', [HospitalController::class, 'agregar'])->name('hospital.agregar');
+Route::post('hospitales/agregar', [HospitalController::class, 'registroNss'])->name('hospital.nss.agregar');
+Route::delete('hospitales/borrar/{pacienteHospital}', [HospitalController::class, 'deleteNss'])->name('hospital.nss.destroy');

@@ -19,7 +19,9 @@ class PacienteController extends Controller
     
     public function index()
     {
+
         $pacienteId = auth()->user()->id;
+        $pacienteId = Paciente::where('user_id', $pacienteId)->value('id');
 
         // Calcular cantidades para las tarjetas
         $confirmadasPorRealizar = Citas::where('paciente_id', $pacienteId)
@@ -82,6 +84,9 @@ class PacienteController extends Controller
 
     public function citasPaciente($pacienteId)
     {
+        $pacienteId = Paciente::where('user_id', $pacienteId)->value('id');
+    
+
         $paciente = Paciente::with(['citas.medico'])->findOrFail($pacienteId);
         return view('pacientes.citas', ['paciente' => $paciente]);
     }

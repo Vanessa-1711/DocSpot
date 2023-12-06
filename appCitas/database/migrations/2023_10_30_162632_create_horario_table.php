@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('horarios', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('hora_inicio');
-            $table->timestamp('hora_fin')->nullable();
+            $table->time('hora_inicio');
+            $table->time('hora_fin')->nullable();
             $table->string('dia');
-            $table->string('medico_id');
+            $table->foreignId('medico_id')->constrained('medicos');
             $table->timestamps();
         });
     }
