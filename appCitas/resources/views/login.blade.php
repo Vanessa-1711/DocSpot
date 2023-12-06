@@ -7,7 +7,7 @@
   <link rel="apple-touch-icon" sizes="76x76" href={{asset('img/apple-icon.png')}}>
   <link rel="icon" type="image/png" href={{asset('img/favicon.png')}}>
   <title>
-    Log in
+    Iniciar Sesión
   </title>
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -86,8 +86,8 @@
             <div class="w-100 justify-content-center align-items-start py-4 px-0" style=" background-color: rgba(252,252,252,0.7); border-radius:1rem; height:80%;">
             <form class="px-4" style="width: 100%;" action="{{route('login')}}" method="POST" novalidate>
               @csrf
-              <div class="mb-3 justify-center">
-                <h5 class=" text-center titulo" >LOGIN</h5>
+              <div class="mb-4 justify-center">
+                <h5 class=" text-center titulo" >INICIAR SESIÓN</h5>
               </div>
               
               @error('mensaje')
@@ -104,7 +104,7 @@
               @enderror
 
               <div class="mb-3">
-                <label for="username" class="form-label subtitulo mx-3 my-0">USERNAME </label>
+                <label for="username" class="form-label subtitulo mx-3 my-0">NOMBRE DE USUARIO </label>
                 <input type="text" style="border-radius: 43px; height:50px; font-size:20px" class="form-control @error ('username') is-invalid @enderror"  value="{{old('username')}}" name="username" id="username">
                 @error ('username')
                   <p class="invalid-feedback" >
@@ -114,7 +114,7 @@
               </div>
                 
               <div class="mb-3">
-                <label for="password" class="form-label  subtitulo mx-3 my-0">PASSWORD</label>
+                <label for="password" class="form-label  subtitulo mx-3 my-0">CONTRASEÑA</label>
                 <input type="password" style="border-radius: 43px; height:50px; font-size:20px" id="password" name="password" class="form-control @error ('password') is-invalid @enderror"  value="{{old('password')}}" aria-describedby="passwordHelpBlock">
                 @error ('password')
                   <p class="invalid-feedback" >
@@ -123,12 +123,12 @@
                 @enderror
               </div>
               <div class=" d-flex justify-content-center align-items-center">
-                <button type="submit" class="btn btn-primary boton" >LOG IN</button>
+                <button type="submit" class="btn btn-primary boton" >INICIAR SESIÓN</button>
               </div>
             </form>
             </div>
             <div class="mb-0 d-flex justify-content-center align-items-center" >
-              <a href="#" class="btn btn-primary boton" style="margin-top:30px; background-color:white;color:black" >SIGN UP</a>
+              <a href="{{route('register')}}" class="btn btn-primary boton" style="margin-top:20px; background-color:white;color:black" >REGISTRARSE</a>
             </div>
           </div>
         </div>

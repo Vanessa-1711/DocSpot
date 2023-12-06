@@ -15,6 +15,7 @@ class Paciente extends Model
         'num_seguro',
         'preferente',
         'fecha_nacimiento',
+        'curp',
         'user_id',
     ];
 

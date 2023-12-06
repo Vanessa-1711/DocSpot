@@ -40,5 +40,12 @@ class LoginController extends Controller
             return back()->withErrors(['mensaje' => 'No puede acceder'])->withInput();
         }
     }
+
+    public function logout() {
+        //cerrar sesion con el helper out implementando elmetodo logout
+        auth()->logout();
+        //enviar la vista del login
+        return redirect()->route('home');
+    }
     
 }

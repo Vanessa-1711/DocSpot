@@ -18,16 +18,26 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'username',
         'telefono',
         'email',
         'password',
         'rol_id',
+        'status',
+        'imagen'
     ];
     public function paciente()
     {
         return $this->hasOne(Paciente::class);
+    }
+
+    public function medico()
+    {
+        return $this->hasOne(Medico::class);
+    }
+    public function hospital()
+    {
+        return $this->hasOne(Hospital::class);
     }
 
     
