@@ -17,7 +17,7 @@ return new class extends Migration
             $table->double('latitud');
             $table->double('longitud');
             $table->string('tipo');
-            $table->string('user_id');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
