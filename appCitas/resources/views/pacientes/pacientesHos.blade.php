@@ -17,7 +17,7 @@
                         <h4 class="card-title mb-3" style="color: #52A0AE;">{{ $nombre }}</h4>
                         <img src="https://img.freepik.com/vector-premium/edificio-hospital-ilustracion-vector-fondo-dibujos-animados-atencion-medica-ambulancia-medico-paciente-enfermeras-exterior-clinica-medica_2175-1510.jpg?w=2000" class="card-img-top rounded" style="border-radius: 15px;" alt="Hospital Image">
                         <div class="card-btn mt-2">
-                            <a href="#" class="btn" type="submit" style="background-color: #42A8A1; color: #ffffff;"><i class="fas fa-eye"> </i> Ver más</a>
+                            <a href="{{ route('pacientes.vermas') }}" class="btn" type="submit" style="background-color: #42A8A1; color: #ffffff;"><i class="fas fa-eye"> </i> Ver más</a>
                         </div>
                     </div>
                 </div>
