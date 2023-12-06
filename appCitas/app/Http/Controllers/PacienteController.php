@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Citas;
 use App\Models\Hospital;
 use App\Models\Paciente;
+use App\Models\Medico;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use DateTime;
@@ -47,15 +48,32 @@ class PacienteController extends Controller
         ]);
     }
 
-    public function verMasHospital()
+    public function verMasHospital($id)
     {
-        return view('pacientes.verMasHospital');
+        // Utiliza el parámetro $id para obtener la información del hospital
+        $hospital = Hospital::find($id);
+        // Recupera los médicos asociados a este hospital
+        $medicos = Medico::where('hospital_id', $id)->get();
+        // Pasa tanto la información del hospital como la lista de médicos a tu vista
+        return view('pacientes.verMasHospital', [
+            'hospital' => $hospital,
+            'medicos' => $medicos,
+        ]);
+    }
+
+    public function verMasDoc($id)
+    {
+
+        $medico = Medico::find($id);
+        return view('pacientes.verMasDoctor', [
+            'medico' => $medico,
+        ]);
     }
 
     public function hospitales()
     {
         $cantidadHospitales = Hospital::count();
-        $nombresHospitales = Hospital::pluck('nombre')->toArray();
+        $nombresHospitales = Hospital::all();
         $pacientes = Paciente::all();
         return view('pacientes.pacientesHos', ['pacientes' => $pacientes, 
         'cantidadHospitales' => $cantidadHospitales,

@@ -257,7 +257,7 @@
                       </div>
 
                       <div class="col-md-12">
-                        <label for="ubicacion" class="form-label subtitulo mx-3 my-0">Ubicación</label>}
+                        <label for="ubicacion" class="form-label subtitulo mx-3 my-0">Ubicación</label>
                         <div style="position: relative;">
                             <div id="direccion-container">
                                 <input style="box-shadow: 0 4px 8px rgba(165, 164, 163 );" type="text" id="direccion" placeholder="Buscar dirección" class="form-control mt-3">

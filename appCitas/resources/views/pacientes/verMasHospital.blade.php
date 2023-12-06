@@ -84,7 +84,7 @@
 
 <div class="container-fluid p-0 position-relative">
     <div class="hospital-name-container position-absolute bottom-10 start-50 translate-middle-x bg-white text-center rounded">
-        <h2 class="nombreHospital m-0 d-inline-block p-2">Nombre del Hospital</h2>
+        <h2 class="nombreHospital m-0 d-inline-block p-2">{{ $hospital->nombre }}</h2>
     </div>
     <img src="{{ asset('img/hospital.jpeg') }}" class="img-fluid w-100" style="object-fit: cover; height: 40vh;" alt="Tu Imagen">
 </div>
@@ -108,7 +108,6 @@
               <h5>Teléfono</h5>
               <!-- Coloca el número de teléfono aquí -->
           </div>
-          <!-- Puedes agregar más información aquí con el mismo formato de ícono y texto -->
       </div>
       
     </div>
@@ -132,42 +131,21 @@
     </div>
     <div class="container-fluid py-5">
       <div class="row justify-content-center">
+        @foreach($medicos as $medico)
           <div class="col-xl-3 col-md-4 col-sm-4 mb-4">
               <div class="card custom-card">
                   <div class="card-body text-center">
-                      <h4 class="card-title mb-3" style="color: #52A0AE;">Nombre del doctor</h4>
+                      <h4 class="card-title mb-3" style="color: #52A0AE;">{{ $medico->nombre }}</h4>
                       <img src="https://img.freepik.com/vector-premium/edificio-hospital-ilustracion-vector-fondo-dibujos-animados-atencion-medica-ambulancia-medico-paciente-enfermeras-exterior-clinica-medica_2175-1510.jpg?w=2000" class="card-img-top rounded" style="border-radius: 15px;" alt="Hospital Image">
+                      <!-- Agrega aquí otros detalles del médico si los tienes, como especialidad, etc. -->
                       <div class="card-btn mt-2 d-flex justify-content-between">
-                        <a href="#" class="btn btn-sm" style="background-color: #42A8A1; color: #ffffff;"><i class="fas fa-eye"></i> Ver más</a>
-                        <a href="#" class="btn btn-sm btn-citas" style="background-color: #42A8A1; color: #ffffff; border-color: #42A8A1;"><i class="far fa-calendar-alt"></i> Cita</a>
+                          <a href="{{ route('pacientes.vermasDoc', ['id' => $medico->id]) }}" class="btn btn-sm" style="background-color: #42A8A1; color: #ffffff;"><i class="fas fa-eye"></i> Ver más</a>
+                          <a href="#" class="btn btn-sm btn-citas" style="background-color: #42A8A1; color: #ffffff; border-color: #42A8A1;"><i class="far fa-calendar-alt"></i> Cita</a>
                       </div>
                   </div>
               </div>
           </div>
-          <div class="col-xl-3 col-md-4 col-sm-4 mb-4">
-              <div class="card custom-card">
-                  <div class="card-body text-center">
-                      <h4 class="card-title mb-3" style="color: #52A0AE;">Doctor</h4>
-                      <img src="https://img.freepik.com/vector-premium/edificio-hospital-ilustracion-vector-fondo-dibujos-animados-atencion-medica-ambulancia-medico-paciente-enfermeras-exterior-clinica-medica_2175-1510.jpg?w=2000" class="card-img-top rounded" style="border-radius: 15px;" alt="Hospital Image">
-                      <div class="card-btn mt-2 d-flex justify-content-between">
-                        <a href="#" class="btn btn-sm" style="background-color: #42A8A1; color: #ffffff;"><i class="fas fa-eye"></i> Ver más</a>
-                        <a href="#" class="btn btn-sm btn-citas" style="background-color: #42A8A1; color: #ffffff; border-color: #42A8A1;"><i class="far fa-calendar-alt"></i> Cita</a>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <div class="col-xl-3 col-md-4 col-sm-4 mb-4">
-            <div class="card custom-card">
-                <div class="card-body text-center">
-                    <h4 class="card-title mb-3" style="color: #52A0AE;">Doctor</h4>
-                    <img src="https://img.freepik.com/vector-premium/edificio-hospital-ilustracion-vector-fondo-dibujos-animados-atencion-medica-ambulancia-medico-paciente-enfermeras-exterior-clinica-medica_2175-1510.jpg?w=2000" class="card-img-top rounded" style="border-radius: 15px;" alt="Hospital Image">
-                    <div class="card-btn mt-2 d-flex justify-content-between">
-                      <a href="#" class="btn btn-sm" style="background-color: #42A8A1; color: #ffffff;"><i class="fas fa-eye"></i> Ver más</a>
-                      <a href="#" class="btn btn-sm btn-citas" style="background-color: #42A8A1; color: #ffffff; border-color: #42A8A1;"><i class="far fa-calendar-alt"></i> Cita</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+      @endforeach
       </div>
   </div>
   
