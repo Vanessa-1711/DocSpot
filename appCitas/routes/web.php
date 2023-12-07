@@ -49,6 +49,7 @@ Route::get('/hospital/pacientes', [PacienteController::class, 'hospitales'])->na
 Route::get('/pacientes/{paciente}/citas', [PacienteController::class, 'citasPaciente'])->name('pacientes.citas');
 
 Route::get('/pacientes/hospital/vermas/{id}', [PacienteController::class, 'verMasHospital'])->name('pacientes.vermas');
+Route::get('/asociar/{hospital}/{nss}', [PacienteController::class, 'asociarHospital'])->name('pacientes.asociar');
 
 <<<<<<< HEAD
 =======
