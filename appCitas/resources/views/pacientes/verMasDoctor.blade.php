@@ -149,16 +149,27 @@
             <div>
                 <i class="far fa-clock fa-lg"></i> <strong>Horarios:</strong>
                 <br>
-                @foreach($horarios as $horario)
-                    <span style="font-weight: normal;">{{ $horario->dia }}: {{ $horario->hora_inicio }} - {{ $horario->hora_fin }}</span>
-                    <br>
-                @endforeach
-            </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- Primeras 4 horas -->
+                        @foreach($horarios->take(4) as $horario)
+                            <span>{{ $horario->dia }}: {{ $horario->hora_inicio }} - {{ $horario->hora_fin }}</span><br>
+                        @endforeach
+                    </div>
+                    <div class="col-md-6">
+                        <!-- Últimas 3 horas -->
+                        @foreach($horarios->slice(4) as $horario)
+                            <span>{{ $horario->dia }}: {{ $horario->hora_inicio }} - {{ $horario->hora_fin }}</span><br>
+                        @endforeach
+                    </div>
+                </div>
+                
             <br>
             <!-- Botón "Agendar Cita" con icono -->
             <a href="{{ route('pacientes.vermasDoc', ['id' => $medico->id]) }}" class="btn btn-sm btn-success btn-white">
                 <i class="fas fa-calendar-plus"></i> Agendar Cita
             </a>
+            
             
         </div>
         
