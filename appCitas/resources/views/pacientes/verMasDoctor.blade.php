@@ -58,21 +58,55 @@
         margin-left: 45%; 
         border-radius: 10px
     }
-    .otroDiv{
+    .otroDiv {
         width: 55%; 
-        height: 50%;
-        background-color:#9FC9D7; 
-        padding: 10px; 
+        height: auto; /* Cambiado de min-height a height */
+        background-color: #9FC9D7; 
+        padding: 20px; 
         font-size: 20px; 
         margin-left: 45%; 
-        border-radius: 10px
+        border-radius: 10px;
+        text-align: left !important;
+    }
+
+    .circle-container-mapa {
+        position: absolute;
+        width: 290px;
+        height: 290px;
+        margin-left: -70%;
+        z-index:10;
+        margin-top:20%;
+        border-radius: 50%;
+        padding: 1.5em;
+        display: flex;
     }
     .mapa {
-        margin-top: 65%;
+        margin-top: 70%;
         margin-left: 0%;
-        margin-right: 55%;
-        width: 40%; /* Ajusta el valor según sea necesario para hacer el mapa más grande */
+        margin-right: 52%;
+        width: 43%; /* Ajusta el valor según sea necesario para hacer el mapa más grande */
+        height: 43%;
     }
+    #map {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            border: 1px solid;
+    }
+    .btn-white {
+        color: #000000; /* Color del texto */
+        background-color: #ffffff; /* Color de fondo blanco */
+        border: 2px solid #42A8A1; /* Color del borde inicial */
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-white:hover {
+        color: #000000 !important ; /* Cambia el color del texto al pasar el ratón */
+        border-color: #000000 !important; /* Cambia el color del borde al pasar el ratón */
+    }
+
+
+    
 
 
 </style>
@@ -82,10 +116,10 @@
         <img src="{{ asset('img/perfilDoc.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover; border-radius: 15px;" alt="Tu Imagen">
     </div>
     <div class="circle-container">
-        <img class="mx-0 my-0" src="{{ asset('img/marie.jpg') }}" alt="Foto de perfil">
+        <img class="mx-0 my-0" src="{{ asset('img/doc.png') }}" alt="Foto de perfil">
     </div>
-    <div class="mapa circle-container">
-        <div id="map" style="width: 100%; height: 100%; border-radius: 10px;"></div>
+    <div class="mapa circle-container-mapa">
+        <div id="map" data-lat="{{$medico->latitud}}" data-lng="{{$medico->longitud}}"></div>
     </div>
 </div>
 
@@ -100,9 +134,34 @@
         </div>
 
         <!-- Div vacío -->
-        <div class="otroDiv rounded-xl text-white mb-2 ml-2 text-center" style="flex: 1;">
-            <!-- Contenido del segundo div -->
+        <div class="otroDiv rounded-xl text-white mb-2 ml-2 text-center custom-height" style="flex: 1; padding: 20px; background-color: #9FC9D7; text-align: left!important;">
+            <!-- Información adicional del médico con iconos -->
+            <div style="margin-bottom: 10px;">
+                <i class="fas fa-envelope fa-lg"></i> <strong>Correo:</strong>
+                <br>
+                <span style="font-weight: normal;">{{ $medico->user->email }}</span>
+            </div>
+            <div style="margin-bottom: 10px;">
+                <i class="fas fa-phone fa-lg"></i> <strong>Teléfono:</strong>
+                <br>
+                <span style="font-weight: normal;">{{ $medico->user->telefono }}</span>
+            </div>
+            <div>
+                <i class="far fa-clock fa-lg"></i> <strong>Horarios:</strong>
+                <br>
+                @foreach($horarios as $horario)
+                    <span style="font-weight: normal;">{{ $horario->dia }}: {{ $horario->hora_inicio }} - {{ $horario->hora_fin }}</span>
+                    <br>
+                @endforeach
+            </div>
+            <br>
+            <!-- Botón "Agendar Cita" con icono -->
+            <a href="{{ route('pacientes.vermasDoc', ['id' => $medico->id]) }}" class="btn btn-sm btn-success btn-white">
+                <i class="fas fa-calendar-plus"></i> Agendar Cita
+            </a>
+            
         </div>
+        
     </div>
 </div>
 
@@ -114,43 +173,44 @@
 
 
 <script>
-    var map;
-    var userMarker;
-    var gymMarkers = [];
+    let map;
 
     function initMap() {
         // Opciones del mapa
-        var mapOptions = {
-            zoom: 15,
+        const map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: 0, lng: 0 },
+            zoom: 14,
             mapId: "c984a1c2512b6347",
-        };
-
-        // Crear el mapa en el elemento con id "map"
-        map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
-        // Obtener las coordenadas del medico desde la base de datos
-        var latitud = {{$medico->latitud}};
-        var longitud = {{$medico->longitud}};
-
-        // Crear un marcador para el gimnasio
-        var gymMarker = new google.maps.Marker({
-            position: { lat: latitud, lng: longitud },
-            map: map,
-            title: "Ubicación del medico",
+            styles: [
+                {
+                    "featureType": "poi",
+                    "elementType": "labels",
+                    "stylers": [
+                        { "visibility": "off" }
+                    ]
+                }
+            ]
         });
 
-        // Agregar el marcador del gimnasio a la lista de marcadores
-        gymMarkers.push(gymMarker);
+        const latitud = parseFloat(document.getElementById('map').dataset.lat);
+        const longitud = parseFloat(document.getElementById('map').dataset.lng);
 
-        // Centrar el mapa en la ubicación del gimnasio
+        const medicoMarker = new google.maps.Marker({
+            position: { lat: latitud, lng: longitud },
+            map: map,
+            title: "Ubicación del médico",
+        });
+
         map.setCenter({ lat: latitud, lng: longitud });
 
+
         // Mostrar las coordenadas en el título del marcador
-        gymMarker.setTitle("Ubicación del medico - Latitud: " + latitud + ", Longitud: " + longitud);
+        medicoMarker.setTitle("Ubicación del medico - Latitud: " + latitud + ", Longitud: " + longitud);
     }
 
-    // Inicializar el mapa cuando se cargue la página
-    initMap();
+    document.addEventListener('DOMContentLoaded', function() {
+        initMap();
+    });
 </script>
 
 

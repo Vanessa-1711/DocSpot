@@ -6,6 +6,7 @@ use App\Models\Citas;
 use App\Models\Hospital;
 use App\Models\Paciente;
 use App\Models\Medico;
+use App\Models\Horario;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use DateTime;
@@ -67,8 +68,10 @@ class PacienteController extends Controller
     {
 
         $medico = Medico::find($id);
+        $horarios = Horario::where('medico_id', $medico->id)->get();
         return view('pacientes.verMasDoctor', [
             'medico' => $medico,
+            'horarios' => $horarios,
         ]);
     }
 
