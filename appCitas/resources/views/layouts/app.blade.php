@@ -55,10 +55,12 @@
             </li>
             <li class="nav-item d-flex align-items-center mr-3">
               @if(auth()->check())
+              <a href="{{ route('ver_perfil') }}">Editar Perfil</a>
                 <a href="javascript:;" class="nav-link text-white font-weight-bold px-0 mr-3" style="font-size: 20px; justify-content: center; align-items: center;display: flex; margin-right:20px;">
                     <i class="fa fa-user me-sm-2"></i>
                     <span class="d-sm-inline d-none">{{ auth()->user()->username }}</span>
                 </a>
+              </a>
               @endif
             </li>
             <li class="nav-item d-flex align-items-center">
