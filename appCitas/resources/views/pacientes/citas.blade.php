@@ -35,6 +35,7 @@
         background-color: white;
         color: #000000; /* Cambia el color del texto al pasar el mouse, si es necesario */
     }
+    
 </style>
 
 <div class="container-fluid py-5">
@@ -73,14 +74,16 @@
                             @if($cita->estado == 0)
                                 <form action="{{ route('citas.confirmar', $cita->id) }}" method="POST">
                                     @csrf
-                                    <button type="submit" class="btn btn-hover" style="background-color: white;"><i class="fas fa-check" style="color: #9FC9D7;"></i></button>
+                                    <button type="submit" class="btn btn-hover" ><i class="fas fa-check" style="color: #9FC9D7;"></i></button>
                                 </form>
                             @endif
                             <!-- Formulario para eliminar la cita -->
-                            <form action="{{ route('citas.eliminar', $cita->id) }}" method="POST">
+                            <form action="{{ route('citas.eliminar', $cita->id) }}" method="POST" class="form-eliminar-cita">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-hover" style="background-color: white;"><i class="fas fa-trash-alt" style="color: #9FC9D7;"></i></button>
+                                <button type="button" class="btn btn-hover eliminar-cita-btn" >
+                                    <i class="fas fa-trash-alt" style="color: #9FC9D7;"></i>
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -128,7 +131,11 @@
 @endsection
 
 @push('scripts')
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
+    
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.btn-editar-cita').forEach(button => {
         button.addEventListener('click', function () {
@@ -142,6 +149,27 @@ document.addEventListener('DOMContentLoaded', function () {
         form.action = `/citas/${citaId}`;
         inputFecha.value = citaFecha;
             inputHora.value = citaHora;
+        });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.eliminar-cita-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const form = this.closest('.form-eliminar-cita');
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Esta acción no se puede deshacer.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#42A8A1',
+                cancelButtonColor: '#677495',
+                confirmButtonText: 'Sí, eliminar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
         });
     });
 });
