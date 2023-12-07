@@ -24,6 +24,7 @@ class PacienteHospital extends Model
 
     public function hospital()
     {
-        return $this->hasMany(Hospital::class);
+        return $this->belongsTo(Hospital::class, 'hospital_id');
     }
+
 }

@@ -75,13 +75,13 @@
         height: 290px;
         margin-left: -70%;
         z-index:10;
-        margin-top:20%;
+        margin-top:40%;
         border-radius: 50%;
         padding: 1.5em;
         display: flex;
     }
     .mapa {
-        margin-top: 70%;
+        margin-top: 77%;
         margin-left: 0%;
         margin-right: 52%;
         width: 43%; /* Ajusta el valor según sea necesario para hacer el mapa más grande */
@@ -110,8 +110,12 @@
 
 
 </style>
-
-<div class="container-fluid p-0 mt-6 d-flex justify-content-center align-items-center">
+<div class="container-fluid p-0 mt-5 d-flex justify-content-center align-items-center">
+    <a href="{{ route('pacientes.vermas', ['id' => $medico->hospital_id]) }}" class="w-100 btn btn-link text-decoration-none m-0" style="text-align: left; color: #42A8A1">
+        <i class="fas fa-arrow-left"></i> Volver
+    </a>
+</div>
+<div class="container-fluid p-0 mt-2 d-flex justify-content-center align-items-center">
     <div class="img-container rounded">
         <img src="{{ asset('img/perfilDoc.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover; border-radius: 15px;" alt="Tu Imagen">
     </div>
@@ -119,7 +123,11 @@
         <img class="mx-0 my-0" src="{{ asset('img/doc.png') }}" alt="Foto de perfil">
     </div>
     <div class="mapa circle-container-mapa">
+    @if($medico->hospital_id)
+        <div id="map" data-lat="{{$medico->hospital->latitud}}" data-lng="{{$medico->hospital->longitud}}"></div>
+    @else
         <div id="map" data-lat="{{$medico->latitud}}" data-lng="{{$medico->longitud}}"></div>
+    @endif
     </div>
 </div>
 
@@ -166,7 +174,7 @@
                 
             <br>
             <!-- Botón "Agendar Cita" con icono -->
-            <a href="{{ route('pacientes.vermasDoc', ['id' => $medico->id]) }}" class="btn btn-sm btn-success btn-white">
+            <a href="{{ route('citas.crear', ['doctor' => $medico->id]) }}" class="btn btn-sm btn-success btn-white">
                 <i class="fas fa-calendar-plus"></i> Agendar Cita
             </a>
             

@@ -7,6 +7,7 @@ use App\Models\Hospital;
 use App\Models\Medico;
 use App\Models\Paciente;
 use App\Models\Horario;
+use App\Models\PacienteHospital;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use DateTime;
@@ -50,27 +51,61 @@ class PacienteController extends Controller
             'citas' => $citas
         ]);
     }
+    public function asociarHospital($hospital, $nss)
+    {
+        $pacienteId = auth()->user()->id;
+        $pacienteId = Paciente::where('user_id', $pacienteId)->value('id');
+        $curp = Paciente::where('id', $pacienteId)->value('curp');
+
+        $registro = PacienteHospital::where('hospital_id', $hospital)
+            ->where('nss', $nss)
+            ->where('curp', $curp)
+            ->first();
+
+        if ($registro) {
+            // Si el registro existe, actualiza la asociación con el paciente_id
+            $registro->update(['paciente_id' => $pacienteId]);
+            return response()->json(['success' => true]);
+        } else {
+            // Si no existe, devuelve un mensaje de error
+            return response()->json(['success' => false, 'message' => 'No se encontró asociación con el hospital y NSS proporcionados.']);
+        }
+            
+    }
+
 
     public function verMasHospital($id)
     {
+        // Obtener el ID del usuario autenticado
+        $paciente_id = auth()->user()->id;
+        $paciente_id = Paciente::where('user_id', $paciente_id)->value('id');
+
+
+        // Buscar en la tabla pacientes_hospitales
+        $registro = PacienteHospital::where('paciente_id', $paciente_id)
+                                ->where('hospital_id', $id)
+                                ->exists();
         // Utiliza el parámetro $id para obtener la información del hospital
-        $hospital = Hospital::find($id);
+        $hospital = Hospital::with('user')->find($id);
+
         // Recupera los médicos asociados a este hospital
         $medicos = Medico::where('hospital_id', $id)->get();
         // Pasa tanto la información del hospital como la lista de médicos a tu vista
         return view('pacientes.verMasHospital', [
             'hospital' => $hospital,
             'medicos' => $medicos,
+            'registro' => $registro,
         ]);
     }
 
     public function verMasDoc($id)
     {
 
-        $medico = Medico::find($id);
+        $medico = Medico::with('hospital')->find($id);
         $horarios = Horario::where('medico_id', $medico->id)->get();
         return view('pacientes.verMasDoctor', [
             'medico' => $medico,
+            'registro'=> $registro,
             'horarios' => $horarios,
         ]);
     }
