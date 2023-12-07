@@ -72,3 +72,5 @@ Route::delete('hospitales/borrar/{pacienteHospital}', [HospitalController::class
 Route::get('/crear_cita/{doctor}', [PacienteController::class, 'crearCita'])->name('citas.crear');
 Route::get('/obtenerHorasDisponibles/{fecha}/{medico_id}', [PacienteController::class, 'obtenerHorasDisponibles'])->name('ruta.obtenerHorasDisponibles');
 Route::post('crear_cita/guardar', [PacienteController::class, 'guardarCita'])->name('citas.guardar');
+
+Route::get('hospitales/doctores/asociados', [HospitalController::class, 'asociarDocVista'])->name('hospital.docAsociados');

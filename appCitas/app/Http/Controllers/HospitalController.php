@@ -71,4 +71,12 @@ class HospitalController extends Controller
         return redirect()->route('hospital.asociar')->with('success', 'Paciente eliminado correctamente.');
     }
 
+    public function asociarDocVista()
+    {
+       
+        return view('hospital.docAsociados');
+    }
+
+    
+
 }
