@@ -68,3 +68,7 @@ Route::get('hospitales/asociar', [HospitalController::class, 'asociarVista'])->n
 Route::get('hospitales/agregar', [HospitalController::class, 'agregar'])->name('hospital.agregar');
 Route::post('hospitales/agregar', [HospitalController::class, 'registroNss'])->name('hospital.nss.agregar');
 Route::delete('hospitales/borrar/{pacienteHospital}', [HospitalController::class, 'deleteNss'])->name('hospital.nss.destroy');
+
+Route::get('/crear_cita/{doctor}', [PacienteController::class, 'crearCita'])->name('citas.crear');
+Route::get('/obtenerHorasDisponibles/{fecha}/{medico_id}', [PacienteController::class, 'obtenerHorasDisponibles'])->name('ruta.obtenerHorasDisponibles');
+Route::post('crear_cita/guardar', [PacienteController::class, 'guardarCita'])->name('citas.guardar');
