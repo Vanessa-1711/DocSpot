@@ -351,7 +351,7 @@ class PacienteController extends Controller
         $paciente = $usuario->paciente; // Asumiendo que tienes una relación de paciente en el modelo User
 
         // Pasa tanto el paciente como el usuario a la vista
-        return view('pacientes.editar_perfil', ['paciente' => $paciente, 'usuario' => $usuario]);
+        return view('pacientes.verMasPaciente', ['paciente' => $paciente, 'usuario' => $usuario]);
     }
 
     public function verPerfil()
