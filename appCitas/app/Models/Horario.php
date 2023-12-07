@@ -15,4 +15,8 @@ class Horario extends Model
         'dia',
         'medico_id',
     ];
+    public function medico()
+    {
+        return $this->hasOne(Medico::class);
+    }
 }
