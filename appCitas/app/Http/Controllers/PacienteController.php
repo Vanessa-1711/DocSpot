@@ -151,7 +151,7 @@ class PacienteController extends Controller
         $cita->save();
     
         // Redirige de vuelta con un mensaje de éxito
-        return redirect()->route('pacientes.citas', $cita->paciente_id)
+        return redirect()->route('pacientes.citas', auth()->user()->id)
                          ->with('success', 'Cita actualizada correctamente.');
     }
     
