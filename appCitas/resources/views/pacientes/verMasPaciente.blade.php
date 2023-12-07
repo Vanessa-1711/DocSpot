@@ -80,7 +80,7 @@
 
 <div class="container-fluid p-0 mt-6 d-flex justify-content-center align-items-center">
     <div class="img-container rounded">
-        <img src="{{ asset('img/home-decor-2.jpg') }}" class="img-fluid w-100 h-100" style="object-fit: cover; border-radius: 15px;" alt="Tu Imagen">
+        <img src="{{ asset('img/doc.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover; border-radius: 15px;" alt="Tu Imagen">
     </div>
     <div class="circle-container">
         <img class="mx-0 my-0" src="{{ asset('img/marie.jpg') }}" alt="Foto de perfil">

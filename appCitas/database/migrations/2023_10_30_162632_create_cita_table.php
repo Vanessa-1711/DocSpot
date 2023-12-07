@@ -16,8 +16,8 @@ return new class extends Migration
             $table->date('fecha');
             $table->timestamp('hora');
             $table->integer('estado');
-            $table->string('medico_id');
-            $table->string('paciente_id');
+            $table->foreignId('medico_id')->constrained('medicos');
+            $table->foreignId('paciente_id')->constrained('pacientes');
             $table->timestamps();
         });
     }

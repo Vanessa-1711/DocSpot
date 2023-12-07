@@ -18,8 +18,8 @@ return new class extends Migration
             $table->double('latitud')->nullable();
             $table->double('longitud')->nullable();
             $table->date('fecha_nacimiento');
-            $table->string('hospital_id')->nullable();
-            $table->string('user_id');
+            $table->foreignId('hospital_id')->constrained('hospitales')->nullable();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -48,8 +48,14 @@ Route::get('/hospital/dashboard', [HospitalController::class, 'index'])->name('h
 Route::get('/hospital/pacientes', [PacienteController::class, 'hospitales'])->name('hospital.pacientes');
 Route::get('/pacientes/{paciente}/citas', [PacienteController::class, 'citasPaciente'])->name('pacientes.citas');
 
-Route::get('/pacientes/hospital/vermas', [PacienteController::class, 'verMasHospital'])->name('pacientes.vermas');
+Route::get('/pacientes/hospital/vermas/{id}', [PacienteController::class, 'verMasHospital'])->name('pacientes.vermas');
 
+<<<<<<< HEAD
+=======
+Route::get('/pacientes/hospital/vermasDoc/{id}', [PacienteController::class, 'verMasDoc'])->name('pacientes.vermasDoc');
+
+
+>>>>>>> 9a4f0b3f6f35192770de40552924b34813fdb20a
 // En web.php
 Route::post('/citas/{cita}/confirmar', [PacienteController::class, 'confirmarCita'])->name('citas.confirmar');
 Route::delete('/citas/{cita}/eliminar', [PacienteController::class, 'eliminarCita'])->name('citas.eliminar');
@@ -58,8 +64,24 @@ Route::delete('/citas/{cita}/eliminar', [PacienteController::class, 'eliminarCit
 Route::get('/citas/{cita}/editar', [PacienteController::class, 'editarCita'])->name('citas.editar');
 Route::put('/citas/{cita}', [PacienteController::class, 'actualizarCita'])->name('citas.actualizar');
 
+<<<<<<< HEAD
 //Editar perfil de pacientes
 Route::get('/pacientes/editar_perfil', [PacienteController::class, 'editarPerfil'])->name('perfil.editar');
 Route::post('/pacientes/actualizar_perfil', [PacienteController::class, 'actualizarPerfil'])->name('update_paciente');
 Route::get('/pacientes/ver_perfil', [PacienteController::class, 'verPerfil'])->name('ver_perfil');
 Route::post('/pacientes/imagen_perfil', [PacienteController::class, 'actualizarImagenPerfil'])->name('actualizarImagenPerfil');
+=======
+
+
+// Hospital
+Route::get('hospitales/asociar', [HospitalController::class, 'asociarVista'])->name('hospital.asociar');
+Route::get('hospitales/agregar', [HospitalController::class, 'agregar'])->name('hospital.agregar');
+Route::post('hospitales/agregar', [HospitalController::class, 'registroNss'])->name('hospital.nss.agregar');
+Route::delete('hospitales/borrar/{pacienteHospital}', [HospitalController::class, 'deleteNss'])->name('hospital.nss.destroy');
+
+Route::get('/crear_cita/{doctor}', [PacienteController::class, 'crearCita'])->name('citas.crear');
+Route::get('/obtenerHorasDisponibles/{fecha}/{medico_id}', [PacienteController::class, 'obtenerHorasDisponibles'])->name('ruta.obtenerHorasDisponibles');
+Route::post('crear_cita/guardar', [PacienteController::class, 'guardarCita'])->name('citas.guardar');
+
+Route::get('hospitales/doctores/asociados', [HospitalController::class, 'asociarDocVista'])->name('hospital.docAsociados');
+>>>>>>> 9a4f0b3f6f35192770de40552924b34813fdb20a

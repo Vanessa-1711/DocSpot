@@ -16,8 +16,11 @@ return new class extends Migration
             $table->timestamps();
             $table->string('curp')->unique();
             $table->string('nss')->unique();
-            $table->string('paciente_id')->nullable();
-            $table->string('hospital_id');
+            $table->foreignId('hospital_id')->constrained('hospitales');
+            $table->foreignId('paciente_id')->nullable()->constrained('pacientes');
+
+
+
         });
     }
 

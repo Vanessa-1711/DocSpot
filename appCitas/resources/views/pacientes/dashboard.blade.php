@@ -36,6 +36,13 @@
             border-radius: 15px; /* Ajusta este valor según tu preferencia */
             overflow: hidden; /* Esto asegura que el contenido interno también se ajuste a las esquinas redondeadas */
         }
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            color: white !important;
+            background: #52a0ae  !important;
+            border: 1px #52a0ae solid !important;
+            border-radius:5px  !important;
+
+        }
         
     </style>
 
@@ -133,9 +140,10 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
      <!-- DataTables -->
-     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-     <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
-
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+  
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+  
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>

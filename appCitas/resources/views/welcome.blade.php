@@ -133,7 +133,7 @@
 
     .btn-outline-primary:hover {
       background-color: #42A8A1;
-      color: rgb(0, 0, 0) !important;
+      color: #298780 !important;
       border-color: #42A8A1;
     }
   
