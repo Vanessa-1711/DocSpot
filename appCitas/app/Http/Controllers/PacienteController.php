@@ -154,7 +154,7 @@ class PacienteController extends Controller
         $cita->save();
 
         // Puedes redirigir a una página de confirmación o a donde necesites después de guardar la cita
-        return redirect()->route('pacientes.citas',['paciente' => $paciente_id]);
+        return redirect()->route('pacientes.citas',['paciente' => auth()->user()->id]);
     }
 
 

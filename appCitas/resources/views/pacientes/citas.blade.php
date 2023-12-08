@@ -35,14 +35,62 @@
         background-color: white;
         color: #000000; /* Cambia el color del texto al pasar el mouse, si es necesario */
     }
+    .medico{
+        font-family: 'Allerta', sans-serif;
+        color:black;
+        background-color: #52A0AE;
+        font-size:30px;
+    }
     
-</style>
+  .search-container {
+        display: flex;
+        border-radius: 20px; /* Ajusta según tus preferencias */
+        overflow: hidden;
+        width: 35%; /* Ajusta el ancho del buscador según tus preferencias */
+        margin-right: 4% !important;
+    }
 
+    .search-container input {
+        flex: 1;
+        padding: 1%; /* Ajusta el padding para hacer el input más pequeño */
+        box-sizing: border-box;
+        border: none;
+        border-radius: 20px;
+        height: 40px; /* Ajusta la altura del input según tus preferencias */
+        font-size: 14px; /* Ajusta el tamaño de la letra en el input */
+        color: #000; /* Color del texto al escribir */
+        background-color: #fff; /* Fondo del input al escribir */
+        border: 1px solid #52A0AE; /* Borde del input */
+    }
+
+    .search-container input:focus {
+        outline: none;
+        border-color: #42A8A1; /* Color del borde al enfocar el input */
+    }
+    .search-container input::clear {
+        display: none; /* Oculta el icono de limpieza por defecto */
+    }
+
+    .search-container input:not(:placeholder-shown)::clear {
+        display: inline; /* Muestra el icono de limpieza cuando hay texto */
+        cursor: pointer;
+    }
+</style>
+<div class="row mt-5 justify-content-center">
+      <div class="col-md-11 p-0">
+          <div class="medico p-3 text-white rounded" style="border-radius: 5%; display: flex; align-items: center; justify-content: space-between;">
+              <h2 class="medico m-0" style="margin-left: 2%; letter-spacing: 5px; color:white">CITAS PROGRAMADAS</h2>
+              <div class="search-container">
+                  <input id="searchInput" type="text" class="px-3 py-2" style="font-size:17px" placeholder="Buscar cita...">
+              </div>
+          </div>
+      </div>
+  </div>
 <div class="container-fluid py-5">
-    <h3>Citas Programadas</h3>
-    <div class="row">
+
+    <div class="row" id="hospitalList">
         @forelse ($paciente->citas as $cita)
-            <div class="col-md-6 mb-4">
+            <div class="col-md-6 mb-4 medicoo" data-medico="{{ $cita->medico->nombre }} {{ $cita->medico->apellido }}" data-estado="{{ $cita->estado == 0 ? 'Pendiente' : 'Confirmada' }}" data-fecha="{{ \Carbon\Carbon::parse($cita->fecha)->isoFormat('D [de] MMMM [del] YYYY') }} a las {{ \Carbon\Carbon::parse($cita->hora)->format('g:i A') }}">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center card-header-custom">
                         <i class="fas fa-calendar-alt fa-2x"></i>
@@ -172,6 +220,39 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     });
+
+    const searchInput = document.getElementById('searchInput');
+    const hospitalList = document.getElementById('hospitalList');
+    const originalCards = hospitalList.innerHTML;
+
+    searchInput.addEventListener('input', function (e) {
+        const searchString = e.target.value.trim().toLowerCase();
+        hospitalList.innerHTML = originalCards;
+
+        if (searchString === '') {
+            return;
+        }
+
+        const appointments = hospitalList.getElementsByClassName('medicoo');
+        const filteredAppointments = Array.from(appointments).filter(function (appointment) {
+            const cardContent = appointment.querySelector('.card-content');
+            const appointmentDetails = cardContent.textContent.toLowerCase();
+
+            return (
+                appointmentDetails.includes(searchString) ||
+                appointment.dataset.medico.toLowerCase().includes(searchString) ||
+                appointment.dataset.estado.toLowerCase().includes(searchString) ||
+                appointment.dataset.fecha.toLowerCase().includes(searchString)
+            );
+        });
+
+        hospitalList.innerHTML = '';
+        filteredAppointments.forEach(function (appointment) {
+            hospitalList.appendChild(appointment.cloneNode(true));
+        });
+    });
 });
+
+
 </script>
 @endpush

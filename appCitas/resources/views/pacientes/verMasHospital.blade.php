@@ -273,29 +273,29 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-    const searchInput = document.getElementById('searchInput');
-    const hospitalList = document.getElementById('hospitalList');
-    const originalCards = hospitalList.innerHTML;
+        const searchInput = document.getElementById('searchInput');
+        const hospitalList = document.getElementById('hospitalList');
+        const originalCards = hospitalList.innerHTML;
 
-    searchInput.addEventListener('input', function (e) {
-        const searchString = e.target.value.trim().toLowerCase();
-        if (searchString === '') {
-            hospitalList.innerHTML = originalCards;
-            return;
-        }
+        searchInput.addEventListener('input', function (e) {
+            const searchString = e.target.value.trim().toLowerCase();
+            if (searchString === '') {
+                hospitalList.innerHTML = originalCards;
+                return;
+            }
 
-        const hospitals = hospitalList.getElementsByClassName('medicoo');
-        const filteredHospitals = Array.from(hospitals).filter(function (hospital) {
-            const hospitalName = hospital.getAttribute('data-id').toLowerCase();
-            return hospitalName.includes(searchString);
-        });
+            const hospitals = hospitalList.getElementsByClassName('medicoo');
+            const filteredHospitals = Array.from(hospitals).filter(function (hospital) {
+                const hospitalName = hospital.getAttribute('data-id').toLowerCase();
+                return hospitalName.includes(searchString);
+            });
 
-        hospitalList.innerHTML = '';
-        filteredHospitals.forEach(function (hospital) {
-            hospitalList.appendChild(hospital.cloneNode(true));
+            hospitalList.innerHTML = '';
+            filteredHospitals.forEach(function (hospital) {
+                hospitalList.appendChild(hospital.cloneNode(true));
+            });
         });
     });
-});
 
 </script>
 <!-- Github buttons -->

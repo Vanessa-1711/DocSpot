@@ -8,10 +8,62 @@
 
 
 @section('content')
+<style>
+   .medico{
+        font-family: 'Allerta', sans-serif;
+        color:black;
+        background-color: #52A0AE;
+        font-size:30px;
+    }
+    
+  .search-container {
+        display: flex;
+        border-radius: 20px; /* Ajusta según tus preferencias */
+        overflow: hidden;
+        width: 35%; /* Ajusta el ancho del buscador según tus preferencias */
+        margin-right: 4% !important;
+    }
+
+    .search-container input {
+        flex: 1;
+        padding: 1%; /* Ajusta el padding para hacer el input más pequeño */
+        box-sizing: border-box;
+        border: none;
+        border-radius: 20px;
+        height: 40px; /* Ajusta la altura del input según tus preferencias */
+        font-size: 14px; /* Ajusta el tamaño de la letra en el input */
+        color: #000; /* Color del texto al escribir */
+        background-color: #fff; /* Fondo del input al escribir */
+        border: 1px solid #52A0AE; /* Borde del input */
+    }
+
+    .search-container input:focus {
+        outline: none;
+        border-color: #42A8A1; /* Color del borde al enfocar el input */
+    }
+    .search-container input::clear {
+        display: none; /* Oculta el icono de limpieza por defecto */
+    }
+
+    .search-container input:not(:placeholder-shown)::clear {
+        display: inline; /* Muestra el icono de limpieza cuando hay texto */
+        cursor: pointer;
+    }
+</style>
+<div class="row mt-5 justify-content-center">
+      <div class="col-md-11 p-0">
+          <div class="medico p-3 text-white rounded" style="border-radius: 5%; display: flex; align-items: center; justify-content: space-between;">
+              <h2 class="medico m-0" style="margin-left: 2%; letter-spacing: 5px;  color:white">HOSPITALES</h2>
+              <div class="search-container">
+                  <input id="searchInput" type="text" class="px-3 py-2" style="font-size:17px" placeholder="Buscar hospital...">
+              </div>
+          </div>
+      </div>
+  </div>
 <div class="container-fluid py-5">
-    <div class="row">
+    <div class="row" id="hospitalList">
         @foreach($nombresHospitales as $nombre)
-            <div class="col-xl-3 col-md-4 col-sm-4 mb-4">
+            <div class="col-xl-3 col-md-4 col-sm-4 mb-4 medicoo" data-id="{{ $nombre->nombre }}">
                 <div class="card">
                     <div class="card-body text-center">
                         <h4 class="card-title mb-3" style="color: #52A0AE;">{{ $nombre ->nombre }}</h4>
@@ -38,97 +90,41 @@
 
 
 <script>
-var ctx1 = document.getElementById("chart-line").getContext("2d");
 
-var gradientStroke1 = ctx1.createLinearGradient(0, 230, 0, 50);
+  document.addEventListener('DOMContentLoaded', function () {
+      const searchInput = document.getElementById('searchInput');
+      const hospitalList = document.getElementById('hospitalList');
+      const originalCards = hospitalList.innerHTML;
 
-gradientStroke1.addColorStop(1, 'rgba(94, 114, 228, 0.2)');
-gradientStroke1.addColorStop(0.2, 'rgba(94, 114, 228, 0.0)');
-gradientStroke1.addColorStop(0, 'rgba(94, 114, 228, 0)');
-new Chart(ctx1, {
-  type: "line",
-  data: {
-    labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-    datasets: [{
-      label: "Mobile apps",
-      tension: 0.4,
-      borderWidth: 0,
-      pointRadius: 0,
-      borderColor: "#5e72e4",
-      backgroundColor: gradientStroke1,
-      borderWidth: 3,
-      fill: true,
-      data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
-      maxBarThickness: 6
+      searchInput.addEventListener('input', function (e) {
+          const searchString = e.target.value.trim().toLowerCase();
 
-    }],
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: false,
-      }
-    },
-    interaction: {
-      intersect: false,
-      mode: 'index',
-    },
-    scales: {
-      y: {
-        grid: {
-          drawBorder: false,
-          display: true,
-          drawOnChartArea: true,
-          drawTicks: false,
-          borderDash: [5, 5]
-        },
-        ticks: {
-          display: true,
-          padding: 10,
-          color: '#fbfbfb',
-          font: {
-            size: 11,
-            family: "Open Sans",
-            style: 'normal',
-            lineHeight: 2
-          },
-        }
-      },
-      x: {
-        grid: {
-          drawBorder: false,
-          display: false,
-          drawOnChartArea: false,
-          drawTicks: false,
-          borderDash: [5, 5]
-        },
-        ticks: {
-          display: true,
-          color: '#ccc',
-          padding: 20,
-          font: {
-            size: 11,
-            family: "Open Sans",
-            style: 'normal',
-            lineHeight: 2
-          },
-        }
-      },
-    },
-  },
-});
+          // Restablecer el contenido original de la lista antes de aplicar el filtro
+          hospitalList.innerHTML = originalCards;
+
+          // Si el campo de búsqueda está vacío, no es necesario aplicar el filtro
+          if (searchString === '') {
+              return;
+          }
+
+          const hospitals = hospitalList.getElementsByClassName('medicoo');
+          const filteredHospitals = Array.from(hospitals).filter(function (hospital) {
+              const hospitalName = hospital.getAttribute('data-id').toLowerCase();
+              return hospitalName.includes(searchString);
+          });
+
+          // Mostrar solo los elementos que coinciden con la búsqueda
+          hospitalList.innerHTML = '';
+          filteredHospitals.forEach(function (hospital) {
+              hospitalList.appendChild(hospital.cloneNode(true));
+          });
+      });
+  });
+
+
+
 </script>
-<script>
-var win = navigator.platform.indexOf('Win') > -1;
-if (win && document.querySelector('#sidenav-scrollbar')) {
-  var options = {
-    damping: '0.5'
-  }
-  Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
-}
-</script>
+
 <!-- Github buttons -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
