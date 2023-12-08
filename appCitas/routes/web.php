@@ -45,7 +45,7 @@ Route::get('/medico/dashboard', [MedicoController::class, 'index'])->name('medic
 Route::get('/hospital/dashboard', [HospitalController::class, 'index'])->name('hospital.dashboard');
 
 
-Route::get('/hospital/pacientes', [PacienteController::class, 'hospitales'])->name('hospital.pacientes');
+Route::get('/hospital/pacientes', [PacienteController::class, 'hospitales'])->name('paciente.hospital');
 Route::get('/pacientes/{paciente}/citas', [PacienteController::class, 'citasPaciente'])->name('pacientes.citas');
 
 Route::get('/pacientes/hospital/vermas/{id}', [PacienteController::class, 'verMasHospital'])->name('pacientes.vermas');
