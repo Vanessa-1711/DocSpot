@@ -36,7 +36,6 @@ class RegisterController extends Controller
         ]);
 
         //Invocar el modelo User para crear el registro
-        
 
         $user = User::create([
             'telefono' => $request->telefono,

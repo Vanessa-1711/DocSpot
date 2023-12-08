@@ -7,8 +7,11 @@ use App\Models\Hospital;
 use App\Models\Medico;
 use App\Models\Paciente;
 use App\Models\Horario;
+use App\Models\PacienteHospital;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use DateTime;
 
 class PacienteController extends Controller
@@ -50,27 +53,61 @@ class PacienteController extends Controller
             'citas' => $citas
         ]);
     }
+    public function asociarHospital($hospital, $nss)
+    {
+        $pacienteId = auth()->user()->id;
+        $pacienteId = Paciente::where('user_id', $pacienteId)->value('id');
+        $curp = Paciente::where('id', $pacienteId)->value('curp');
+
+        $registro = PacienteHospital::where('hospital_id', $hospital)
+            ->where('nss', $nss)
+            ->where('curp', $curp)
+            ->first();
+
+        if ($registro) {
+            // Si el registro existe, actualiza la asociación con el paciente_id
+            $registro->update(['paciente_id' => $pacienteId]);
+            return response()->json(['success' => true]);
+        } else {
+            // Si no existe, devuelve un mensaje de error
+            return response()->json(['success' => false, 'message' => 'No se encontró asociación con el hospital y NSS proporcionados.']);
+        }
+            
+    }
+
 
     public function verMasHospital($id)
     {
+        // Obtener el ID del usuario autenticado
+        $paciente_id = auth()->user()->id;
+        $paciente_id = Paciente::where('user_id', $paciente_id)->value('id');
+
+
+        // Buscar en la tabla pacientes_hospitales
+        $registro = PacienteHospital::where('paciente_id', $paciente_id)
+                                ->where('hospital_id', $id)
+                                ->exists();
         // Utiliza el parámetro $id para obtener la información del hospital
-        $hospital = Hospital::find($id);
+        $hospital = Hospital::with('user')->find($id);
+
         // Recupera los médicos asociados a este hospital
         $medicos = Medico::where('hospital_id', $id)->get();
         // Pasa tanto la información del hospital como la lista de médicos a tu vista
         return view('pacientes.verMasHospital', [
             'hospital' => $hospital,
             'medicos' => $medicos,
+            'registro' => $registro,
         ]);
     }
 
     public function verMasDoc($id)
     {
 
-        $medico = Medico::find($id);
+        $medico = Medico::with('hospital')->find($id);
         $horarios = Horario::where('medico_id', $medico->id)->get();
         return view('pacientes.verMasDoctor', [
             'medico' => $medico,
+            'registro'=> $registro,
             'horarios' => $horarios,
         ]);
     }
@@ -119,7 +156,7 @@ class PacienteController extends Controller
         $cita->save();
 
         // Puedes redirigir a una página de confirmación o a donde necesites después de guardar la cita
-        return redirect()->route('pacientes.citas',['paciente' => $paciente_id]);
+        return redirect()->route('pacientes.citas',['paciente' => auth()->user()->id]);
     }
 
 
@@ -307,5 +344,66 @@ class PacienteController extends Controller
         return redirect()->route('pacientes.citas', auth()->user()->id)
                          ->with('success', 'Cita actualizada correctamente.');
     }
-    
+
+    public function editarPerfil()
+    {
+        $usuario = auth()->user(); // Obtener el usuario autenticado
+        $paciente = $usuario->paciente; // Asumiendo que tienes una relación de paciente en el modelo User
+
+        // Pasa tanto el paciente como el usuario a la vista
+        return view('pacientes.verMasPaciente', ['paciente' => $paciente, 'usuario' => $usuario]);
+    }
+
+    public function verPerfil()
+    {
+        $usuario = auth()->user(); // Obtener el usuario autenticado
+        $paciente = $usuario->paciente; // Asumiendo que tienes una relación de paciente en el modelo User
+
+        // Pasa tanto el paciente como el usuario a la vista
+        return view('pacientes.verMasPaciente', ['paciente' => $paciente, 'usuario' => $usuario]);
+    }
+
+    public function actualizarPerfil(Request $request)
+    {
+        //dd($request->all()); // Esto mostrará todos los datos del formulario y detendrá la ejecución
+
+        $usuario = auth()->user(); // Obtener el usuario actual
+        $paciente = $usuario->paciente; // Obtener la instancia del Paciente asociada
+        
+        // Validar los datos del formulario
+        $validatedData = $request->validate([
+            'nombre' => 'required|regex:/^[a-zA-ZáéíóúÁÉÍÓÚÑñ\s]+$/',
+            'apellido' => 'required|regex:/^[a-zA-ZáéíóúÁÉÍÓÚÑñ\s]+$/',
+            'telefono' => 'nullable|regex:/^[0-9]+$/|max:10',
+            'fecha_nacimiento' => 'required|date|before_or_equal:today',
+            'curp' => 'required|unique:pacientes,curp,' . $paciente->id . '|regex:/^[a-zA-Z0-9]{18}$/',
+            'email' => 'required|email|unique:users,email,' . $usuario->id,
+            'password' => 'nullable|min:6|confirmed'
+        ]);
+        
+        // Datos específicos para el modelo User
+        $datosUsuario = [
+            'telefono' => $validatedData['telefono'],
+            'email' => $validatedData['email']
+        ];
+        if (!empty($validatedData['password'])) {
+            $datosUsuario['password'] = bcrypt($validatedData['password']);
+        }
+        //$usuario->fill($datosUsuario)->save();
+        $usuario->save($datosUsuario);
+
+        // Datos específicos para el modelo Paciente
+        $datosPaciente = [
+            'nombre' => $validatedData['nombre'],
+            'apellido' => $validatedData['apellido'],
+            'fecha_nacimiento' => $validatedData['fecha_nacimiento'],
+            'curp' => $validatedData['curp']
+        ];
+        $paciente->update($datosPaciente);
+
+        // Redirigir al usuario con un mensaje de éxito
+        return redirect()->route('paciente.dashboard')
+                        ->with('success', 'Perfil actualizado correctamente.');
+    }
+
 }

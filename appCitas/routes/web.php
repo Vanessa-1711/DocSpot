@@ -49,10 +49,9 @@ Route::get('/hospital/pacientes', [PacienteController::class, 'hospitales'])->na
 Route::get('/pacientes/{paciente}/citas', [PacienteController::class, 'citasPaciente'])->name('pacientes.citas');
 
 Route::get('/pacientes/hospital/vermas/{id}', [PacienteController::class, 'verMasHospital'])->name('pacientes.vermas');
+Route::get('/asociar/{hospital}/{nss}', [PacienteController::class, 'asociarHospital'])->name('pacientes.asociar');
 
 Route::get('/pacientes/hospital/vermasDoc/{id}', [PacienteController::class, 'verMasDoc'])->name('pacientes.vermasDoc');
-
-
 // En web.php
 Route::post('/citas/{cita}/confirmar', [PacienteController::class, 'confirmarCita'])->name('citas.confirmar');
 Route::delete('/citas/{cita}/eliminar', [PacienteController::class, 'eliminarCita'])->name('citas.eliminar');
@@ -60,7 +59,11 @@ Route::delete('/citas/{cita}/eliminar', [PacienteController::class, 'eliminarCit
 
 Route::get('/citas/{cita}/editar', [PacienteController::class, 'editarCita'])->name('citas.editar');
 Route::put('/citas/{cita}', [PacienteController::class, 'actualizarCita'])->name('citas.actualizar');
-
+//Editar perfil de pacientes
+Route::get('/pacientes/editar_perfil', [PacienteController::class, 'editarPerfil'])->name('perfil.editar');
+Route::post('/pacientes/actualizar_perfil', [PacienteController::class, 'actualizarPerfil'])->name('update_paciente');
+Route::get('/pacientes/ver_perfil', [PacienteController::class, 'verPerfil'])->name('ver_perfil');
+Route::post('/pacientes/imagen_perfil', [PacienteController::class, 'actualizarImagenPerfil'])->name('actualizarImagenPerfil');
 
 
 // Hospital
