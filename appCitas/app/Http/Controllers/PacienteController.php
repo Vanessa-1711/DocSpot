@@ -323,15 +323,16 @@ class PacienteController extends Controller
     
         // Valida los datos del formulario
         $validatedData = $request->validate([
-            'fecha' => 'required|date_format:Y-m-d',
-            'hora'  => 'required|date_format:H:i', // Asegúrate de que el formato sea 'H:i'
+            'fecha_flat' => 'required|date_format:Y-m-d',
+            'hora_flat'  => 'required|date_format:H:i', // Asegúrate de que el formato sea 'H:i'
         ]);
-    
+
+        
         // Formatea la hora para que sea compatible con el formato de la base de datos
-        $hora = \Carbon\Carbon::createFromFormat('H:i', $validatedData['hora'])->format('H:i:s');
+        $hora = \Carbon\Carbon::createFromFormat('H:i', $validatedData['hora_flat'])->format('H:i:s');
     
         // Actualiza los valores de fecha y hora de la cita con los nuevos datos
-        $cita->fecha = $validatedData['fecha'];
+        $cita->fecha = $validatedData['fecha_flat'];
         $cita->hora = $hora; // Asigna el valor formateado
     
         // Cambia el estado de la cita a 0 (pendiente)

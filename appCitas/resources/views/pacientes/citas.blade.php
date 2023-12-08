@@ -110,12 +110,13 @@
                             @endif
                         </div>
                         <div class="d-flex justify-content-end">
-                            <button type="button" class="btn btn-hover" 
+                            <button type="button" class="btn btn-hover" id="boton-modal" 
                                 data-bs-toggle="modal" 
                                 data-bs-target="#editarCitaModal{{ $cita->id }}"
                                 data-cita-id="{{ $cita->id }}"
                                 data-cita-fecha="{{ $cita->fecha }}"
-                                data-cita-hora="{{ $cita->hora }}">
+                                data-cita-hora="{{ $cita->hora }}"
+                                data-cita-medico-id="{{ $cita->medico->id }}">
                                 <i class="fas fa-edit" style="color: #9FC9D7;"></i>
                             </button>
                             <!-- Formulario para confirmar la cita -->
@@ -153,18 +154,41 @@
                     <h5 class="modal-title" id="editarCitaModalLabel{{ $cita->id }}">Editar Cita</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form method="POST" action="{{ route('citas.actualizar', $cita->id) }}">
+                <form method="POST" id="form{{ $cita->id }}" action="{{ route('citas.actualizar', $cita->id) }}">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="fecha{{ $cita->id }}" class="form-label">Fecha de la cita</label>
-                            <input type="date" class="form-control" id="fecha{{ $cita->id }}" name="fecha" value="{{ $cita->fecha }}">
+                            <label for="fecha{{ $cita->id }}" class="form-label">Fecha actual de la cita</label>
+                            <input type="date" class="form-control" id="fecha{{ $cita->id }}" value="{{ $cita->fecha }}" readonly>
                         </div>
+
                         <div class="mb-3">
-                            <label for="hora{{ $cita->id }}" class="form-label">Hora de la cita</label>
-                            <input type="time" class="form-control" id="hora{{ $cita->id }}" name="hora" value="{{ \Carbon\Carbon::parse($cita->hora)->format('H:i') }}">
+                            <label for="hora{{ $cita->id }}" class="form-label">Hora actual de la cita</label>
+                            <input type="time" class="form-control" id="hora{{ $cita->id }}"  value="{{ \Carbon\Carbon::parse($cita->hora)->format('H:i') }}" readonly>
                         </div>
+
+                        <div class="form-group" style="margin-top:2.5rem; margin-bottom:3.5rem">
+                            <label for="fecha" class="subtitulo">Seleccionar nueva fecha</label>
+                            <input type="text" id="fecha_flat{{ $cita->id }}" name="fecha_flat" class="form-control  @error ('fecha') is-invalid @enderror"  value="{{old('fecha')}}"  placeholder="Seleccionar fecha">
+                            @error ('fecha')
+                                <p class="invalid-feedback" >
+                                    {{$message}}
+                                </p>
+                            @enderror
+                        </div>
+                        <div class="form-group" style="margin-top:2.5rem; margin-bottom:3.5rem">
+                            <label for="hora" class="subtitulo">Seleccionar nueva hora</label>
+                            <select id="hora_flat{{ $cita->id }}" name="hora_flat" class="form-control @error ('hora') is-invalid @enderror">
+                          
+                            </select>
+                            @error ('hora')
+                                <p class="invalid-feedback" >
+                                    {{$message}}
+                                </p>
+                            @enderror
+                        </div>
+                        
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary btn-custom-color btn-hover-white" data-bs-dismiss="modal">Cerrar</button>
@@ -181,22 +205,188 @@
 @push('scripts')
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
+function cargarHorasDisponibles(fechaSeleccionada, medicoId, id) {
+// Realiza la solicitud AJAX para obtener las horas disponibles
+    $.ajax({
+        type: "GET",
+        url: "{{ route('ruta.obtenerHorasDisponibles', ['fecha' => ':fecha', 'medico_id' => ':medico_id']) }}"
+            .replace(':fecha', fechaSeleccionada)
+            .replace(':medico_id', medicoId),
+        success: function(response) {
+            console.log(response);
+            // Limpiar el select de horas
+            $('#hora_flat' + id).empty();
+            // Agregar las opciones de horas disponibles al select
+            response.forEach(function(hora) {
+                $('#hora_flat' + id).append('<option value="' + hora + '">' + hora + '</option>');
+            });
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+function cargarFechasDisponibles(medico_id, id) {
+    console.log('#fecha_flat:fecha_flat'.replace(':fecha_flat', id));
+    // Mostrar mensaje de carga
+    $('#fecha_flat:fecha_flat'.replace(':fecha_flat', id)).val('Cargando fechas disponibles...');
+        Swal.fire({
+        title: 'Cargando fechas disponibles...',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        onBeforeOpen: () => {
+            Swal.showLoading();
+            $('.swal2-container').css('pointer-events', 'none'); // Desactivar clics fuera del modal
+        }
+    });
+
+    // Obtener la fecha actual y la fecha dentro de 15 días
+    var fechaActual = new Date();
+    var fechaFinal = new Date();
+    fechaFinal.setDate(fechaFinal.getDate() + 7); // Sumar 7 días
+
+    // Array para almacenar las fechas sin horas disponibles
+    var fechasSinHorasDisponibles = [];
+
+    // Función para realizar la verificación de horas disponibles
+    function verificarHorasDisponibles(fecha) {
+        // Realizar la solicitud AJAX para obtener las horas disponibles
+        $.ajax({
+            type: "GET",
+            url: "{{ route('ruta.obtenerHorasDisponibles', ['fecha' => ':fecha', 'medico_id' => ':medico_id']) }}"
+                .replace(':fecha', fecha)
+                .replace(':medico_id', medico_id),
+            success: function(response) {
+                console.log(response);
+                if (!response || response.length === 0) {
+                    // Si no hay horas disponibles, agregar la fecha al array
+                    fechasSinHorasDisponibles.push(fecha);
+                    console.log("{{ route('ruta.obtenerHorasDisponibles', ['fecha' => ':fecha', 'medico_id' => ':medico_id']) }}".replace(':fecha', fecha).replace(':medico_id',medico_id));
+                }
+            },
+            error: function(error) {
+                console.log(error);
+            },
+            complete: function() {
+                // Cuando se complete la verificación de las fechas, configurar Flatpickr
+                if (fechaActual.getTime() > fechaFinal.getTime()) {
+                    // Quitar el mensaje de carga
+                    $('#fecha_flat:fecha_flat'.replace(':fecha_flat', id)).val('');
+                    
+                    // Configurar Flatpickr con las fechas sin horas disponibles
+                    configurarFlatpickr(fechasSinHorasDisponibles,id,medico_id);
+                    console.log("aaaaa");
+                   
+
+                    Swal.close();
+
+                    
+                } else {
+                    fechaActual.setDate(fechaActual.getDate() + 1);
+                    verificarHorasDisponibles(fechaActual.toISOString().split('T')[0]);
+                }
+            }
+        });
+    }
+
+    // Iniciar la verificación de las fechas disponibles
+    verificarHorasDisponibles(fechaActual.toISOString().split('T')[0]);
+}
+
+// Función para configurar Flatpickr con las fechas sin horas disponibles
+function configurarFlatpickr(fechasSinHorasDisponibles,id, medico_id) {
+    $('#fecha_flat:fecha_flat'.replace(':fecha_flat', id)).flatpickr({
+        enableTime: false,
+        dateFormat: "Y-m-d",
+        minDate: "today",
+        altInput: true,
+        altFormat: "F j, Y",
+        disable: fechasSinHorasDisponibles, // Desactivar las fechas sin horas disponibles
+        onChange: function(selectedDates, dateStr, instance) {
+            // Al cambiar la fecha, obtén las horas disponibles
+            cargarHorasDisponibles(dateStr, medico_id, id);
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Obtener todos los botones de clase "btn-hover"
+    const buttons = document.querySelectorAll('.btn-hover');
+    var medicoId="";
+    // Iterar sobre cada botón y agregar un listener para capturar el clic
+    buttons.forEach(button => {
+        button.addEventListener('click', function (event) {
+            // Obtener el ID del médico del botón clickeado
+            medicoId = this.getAttribute('data-cita-medico-id');
+            id= this.getAttribute('data-cita-id');
+            
+            // Realizar acciones con el ID del médico obtenido
+            console.log('Se hizo clic en un botón de cita. ID del médico:', medicoId);
+            cargarFechasDisponibles(medicoId,id);
+            // Otras acciones...
+        });
+    });
+
+
+    // Hacer la llamada AJAX al cambiar la fecha seleccionada
+    $('#fecha_flat').change(function() {
+        console.log("aqui");
+        var fechaSeleccionada = $(this).val();
+        console.log("{{ route('ruta.obtenerHorasDisponibles', ['fecha' => ':fecha', 'medico_id' => ':medico_id']) }}"
+                .replace(':fecha', fechaSeleccionada)
+                .replace(':medico_id', medicoId));
+        // Realizar la solicitud AJAX para obtener las horas disponibles
+        $.ajax({
+            type: "GET",
+            url: "{{ route('ruta.obtenerHorasDisponibles', ['fecha' => ':fecha', 'medico_id' => ':medico_id']) }}"
+                .replace(':fecha', fechaSeleccionada)
+                .replace(':medico_id', medicoId),
+            success: function(response) {
+                console.log("s");
+                // Limpiar el select de horas
+                $('#hora_flat').empty();
+                console.log(response);
+                // Agregar las opciones de horas disponibles al select
+                response.forEach(function(hora) {
+                    
+                    $('#hora_flat').append('<option value="' + hora + '">' + hora + '</option>');
+                });
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
     
+});
+
+
+
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.btn-editar-cita').forEach(button => {
         button.addEventListener('click', function () {
             const citaId = this.dataset.citaId;
             
             const modal = document.querySelector(`#editarCitaModal${citaId}`);
-            const form = modal.querySelector('form');
-            const inputFecha = form.querySelector(`#fecha${citaId}`);
-            const inputHora = form.querySelector(`#hora${citaId}`);
+            const form = modal.querySelector(`#form${citaId}`); // Seleccionar el formulario por su ID único
+            const inputFecha = form.querySelector(`#fecha_flat`);
+            const inputHora = form.querySelector(`#hora_flat`);
+
+            // Capturar los valores de fecha y hora desde los campos del modal
+            const nuevaFecha = inputFecha.value;
+            const nuevaHora = inputHora.value;
+
+            // Hacer algo con los valores capturados, como enviarlos a través de AJAX
+            console.log('Nueva fecha:', nuevaFecha);
+            console.log('Nueva hora:', nuevaHora);
 
         form.action = `/citas/${citaId}`;
-        inputFecha.value = citaFecha;
-            inputHora.value = citaHora;
+        inputFecha.value = nuevaFecha;
+        inputHora.value = nuevaHora;
         });
     });
 });
@@ -253,6 +443,5 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-
-</script>
+</script>   
 @endpush
