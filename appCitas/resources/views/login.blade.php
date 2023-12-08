@@ -24,7 +24,16 @@
   <link id="pagestyle" href="{{asset('css/argon-dashboard.css?v=2.0.4')}}" rel="stylesheet" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Allerta&family=Calistoga&display=swap');
-
+    .btn-outline-primary:hover {
+      background-color: #42A8A1;
+      color: #298780 !important;
+      border-color: #42A8A1;
+    }
+    .btn-outline-primary {
+      background-color: #42A8A1;
+      border-color: #52A0AE;
+      color: white !important;
+    }
     .titulo{
       font-family: 'Calistoga', serif;
       color:black;
@@ -39,11 +48,9 @@
     }
     .cont {
       display: flex;
-      position: fixed;
       top: 0;
       bottom: 0;
       width: 100%;
-      max-width: 100%;
       overflow-y: auto;
       padding: 0;
       box-shadow: none;
@@ -72,13 +79,34 @@
         display: none; /* Oculta el primer .cont-2 en dispositivos móviles */
       }
     }
+    .navbar-fija {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1030;
+    }
 
 
   </style>
 </head>
 
 <body class="bg-white">
-  <div class="cont">
+  <div class="navbar-fija">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light align-items-center">
+      <div class="container-fluid">
+        <!-- Logo a la izquierda -->
+        <a class="navbar-brand m-0" href="/" >
+          <img src="{{ asset('img/logos/hos.png') }}" class="navbar-brand-img h-100" alt="main_logo" style="width: 50px;">
+          <span class="ms-1 text-white font-weight-bold" style="font-size: 22px;">DocSpot</span>
+        </a>
+        <!-- Botones "Sign In" y "Sign Up" a la derecha -->
+        <div class="navbar-nav ml-auto">
+          <a href="{{route('register')}}" class="btn btn-outline-primary m-2" style="color:white">Registrarse</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+  <div class="cont mt-5">
     <div class="cont-2" style="background-image:url('{{asset('img/doc2.png')}}') ">
     </div>
     <div class="cont-2 p-5">
@@ -129,9 +157,7 @@
               </div>
             </form>
             </div>
-            <div class="mb-0 d-flex justify-content-center align-items-center" >
-              <a href="{{route('register')}}" class="btn btn-primary boton" style="margin-top:20px; background-color:white;color:black" >REGISTRARSE</a>
-            </div>
+            
           </div>
         </div>
       </div>
