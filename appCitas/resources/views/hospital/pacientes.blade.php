@@ -3,7 +3,7 @@
 @section('title', 'Hospitales')
 
 @section('aside')
-    @include('layouts.aside_pacientes')
+    @include('layouts.aside_hospitales')
 @endsection
 
 
@@ -73,13 +73,13 @@
                         <div class="card-btn mt-2" style="display: flex;align-items: center;justify-content: center;">
                           <a href="{{ route('hospital.vermasPaciente', ['id' => $nombre->id]) }}" class="btn pr-2" type="submit" style="background-color: #42A8A1; color: #ffffff; margin-right: 10px;"><i class="fas fa-eye"> </i> Ver más</a>
                           <form action="{{ route('hospital.paciente.destroy', $nombre->id) }}" method="POST">
-    @csrf
-    @method('DELETE')
-    <button type="submit" style="background-color: #42A8A1; color: #ffffff;" class="btn delete-button text-red-600 delete-button mb-0">
-        <i class="fas fa-trash"></i> 
-        Eliminar
-    </button>
-</form>
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" style="background-color: #42A8A1; color: #ffffff;" class="btn delete-button text-red-600 delete-button mb-0">
+                                <i class="fas fa-trash"></i> 
+                                Eliminar
+                            </button>
+                        </form>
 
                         </div>
                         

@@ -212,7 +212,7 @@
       </div>
     </nav>
   </div>
-  <div class="cont mt-5">
+  <div class="cont mt-5" style="height:100vh">
   <div class="cont-2" style="background-image:url('{{asset('img/doc2.png')}}') "></div>
     <div class="cont-2 p-5" style="overflow-y: auto;">
       <div class="container" style="height: 90vh">
