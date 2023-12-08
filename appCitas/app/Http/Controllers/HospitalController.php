@@ -25,6 +25,32 @@ class HospitalController extends Controller
         $hospitalPaciente = PacienteHospital::whereNull('paciente_id')->get();
         return view('hospital.asociar', ['hospitalPaciente' => $hospitalPaciente]);
     }
+    public function index_pacientes(){
+        $usuario = auth()->user();
+        $hospital = Hospital::where('user_id', $usuario->id)->first();
+
+        if ($hospital) {
+            $pacientesIds = PacienteHospital::where('hospital_id', $hospital->id)
+                ->pluck('paciente_id')
+                ->toArray();
+
+            $pacientes = Paciente::whereIn('id', $pacientesIds)->get();
+
+            return view('hospital.pacientes', [
+                'cantidadHospitales' => $pacientes->count(),
+                'nombresPacientes' => $pacientes,
+            ]);
+        }
+
+    }
+    public function verMasPaciente($id)
+    {
+
+        $paciente = Paciente::find($id);
+        return view('hospital.vermasPaciente', [
+            'paciente' => $paciente,
+        ]);
+    }
 
     
     public function agregar(){
@@ -71,6 +97,20 @@ class HospitalController extends Controller
 
         return redirect()->route('hospital.asociar')->with('success', 'Paciente eliminado correctamente.');
     }
+    public function deletePaciente(Request $request, $pacienteHospitalId){
+        
+        $pacienteHospital = PacienteHospital::where('paciente_id', $pacienteHospitalId)->first();
+
+     
+        if ($pacienteHospital) {
+            // Continúa con el proceso de eliminación
+            $pacienteHospital->delete();
+            return redirect()->route('hospital.pacientes')->with('success', 'Paciente eliminado correctamente.');
+        } else {
+            return redirect()->route('hospital.pacientes')->with('error', 'No se pudo encontrar el registro del paciente.');
+        }
+    }
+    
 
     public function asociarDocVista()
     {

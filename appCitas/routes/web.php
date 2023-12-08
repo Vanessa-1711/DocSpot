@@ -77,3 +77,7 @@ Route::get('/obtenerHorasDisponibles/{fecha}/{medico_id}', [PacienteController::
 Route::post('crear_cita/guardar', [PacienteController::class, 'guardarCita'])->name('citas.guardar');
 
 Route::get('hospitales/doctores/asociados', [HospitalController::class, 'asociarDocVista'])->name('hospital.docAsociados');
+
+Route::get('hospitales/pacientes', [HospitalController::class, 'index_pacientes'])->name('hospital.pacientes');
+Route::get('/hospital/vermasPaciente/{id}', [HospitalController::class, 'verMasPaciente'])->name('hospital.vermasPaciente');
+Route::delete('/paciente/borrar/{pacienteHospital}', [HospitalController::class, 'deletePaciente'])->name('hospital.paciente.destroy');
