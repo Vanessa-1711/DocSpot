@@ -22,9 +22,10 @@ class HospitalController extends Controller
 
     public function asociarVista()
     {
-        $hospitalPaciente = PacienteHospital::all();
+        $hospitalPaciente = PacienteHospital::whereNull('paciente_id')->get();
         return view('hospital.asociar', ['hospitalPaciente' => $hospitalPaciente]);
     }
+
     
     public function agregar(){
 
