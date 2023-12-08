@@ -10,6 +10,8 @@ use App\Models\Horario;
 use App\Models\PacienteHospital;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use DateTime;
 
 class PacienteController extends Controller
@@ -342,5 +344,66 @@ class PacienteController extends Controller
         return redirect()->route('pacientes.citas', auth()->user()->id)
                          ->with('success', 'Cita actualizada correctamente.');
     }
-    
+
+    public function editarPerfil()
+    {
+        $usuario = auth()->user(); // Obtener el usuario autenticado
+        $paciente = $usuario->paciente; // Asumiendo que tienes una relación de paciente en el modelo User
+
+        // Pasa tanto el paciente como el usuario a la vista
+        return view('pacientes.verMasPaciente', ['paciente' => $paciente, 'usuario' => $usuario]);
+    }
+
+    public function verPerfil()
+    {
+        $usuario = auth()->user(); // Obtener el usuario autenticado
+        $paciente = $usuario->paciente; // Asumiendo que tienes una relación de paciente en el modelo User
+
+        // Pasa tanto el paciente como el usuario a la vista
+        return view('pacientes.verMasPaciente', ['paciente' => $paciente, 'usuario' => $usuario]);
+    }
+
+    public function actualizarPerfil(Request $request)
+    {
+        //dd($request->all()); // Esto mostrará todos los datos del formulario y detendrá la ejecución
+
+        $usuario = auth()->user(); // Obtener el usuario actual
+        $paciente = $usuario->paciente; // Obtener la instancia del Paciente asociada
+        
+        // Validar los datos del formulario
+        $validatedData = $request->validate([
+            'nombre' => 'required|regex:/^[a-zA-ZáéíóúÁÉÍÓÚÑñ\s]+$/',
+            'apellido' => 'required|regex:/^[a-zA-ZáéíóúÁÉÍÓÚÑñ\s]+$/',
+            'telefono' => 'nullable|regex:/^[0-9]+$/|max:10',
+            'fecha_nacimiento' => 'required|date|before_or_equal:today',
+            'curp' => 'required|unique:pacientes,curp,' . $paciente->id . '|regex:/^[a-zA-Z0-9]{18}$/',
+            'email' => 'required|email|unique:users,email,' . $usuario->id,
+            'password' => 'nullable|min:6|confirmed'
+        ]);
+        
+        // Datos específicos para el modelo User
+        $datosUsuario = [
+            'telefono' => $validatedData['telefono'],
+            'email' => $validatedData['email']
+        ];
+        if (!empty($validatedData['password'])) {
+            $datosUsuario['password'] = bcrypt($validatedData['password']);
+        }
+        //$usuario->fill($datosUsuario)->save();
+        $usuario->save($datosUsuario);
+
+        // Datos específicos para el modelo Paciente
+        $datosPaciente = [
+            'nombre' => $validatedData['nombre'],
+            'apellido' => $validatedData['apellido'],
+            'fecha_nacimiento' => $validatedData['fecha_nacimiento'],
+            'curp' => $validatedData['curp']
+        ];
+        $paciente->update($datosPaciente);
+
+        // Redirigir al usuario con un mensaje de éxito
+        return redirect()->route('paciente.dashboard')
+                        ->with('success', 'Perfil actualizado correctamente.');
+    }
+
 }
