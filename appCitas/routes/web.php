@@ -73,4 +73,8 @@ Route::get('/crear_cita/{doctor}', [PacienteController::class, 'crearCita'])->na
 Route::get('/obtenerHorasDisponibles/{fecha}/{medico_id}', [PacienteController::class, 'obtenerHorasDisponibles'])->name('ruta.obtenerHorasDisponibles');
 Route::post('crear_cita/guardar', [PacienteController::class, 'guardarCita'])->name('citas.guardar');
 
+
+//Hospital-Doctores
 Route::get('hospitales/doctores/asociados', [HospitalController::class, 'asociarDocVista'])->name('hospital.docAsociados');
+Route::get('hospitales/doctores/agregar', [HospitalController::class, 'agregarDoctorVista'])->name('hospital.agregarDocVista');
+Route::post('hospitales/doctores/agregar', [HospitalController::class, 'agregarDoctor'])->name('hospital.agregarDoc');
