@@ -56,7 +56,8 @@
         padding: 10px; 
         font-size: 20px; 
         margin-left: 45%; 
-        border-radius: 10px
+        border-radius: 10px;
+        height: auto;
     }
     .otroDiv{
         width: 55%; 
@@ -73,6 +74,24 @@
         margin-left: 0%;
         margin-right: 55%;
         width: 40%; /* Ajusta el valor según sea necesario para hacer el mapa más grande */
+    }
+    .subtitulo{
+      font-family: 'Allerta', sans-serif;
+      color:black;
+      font-size:20px;
+      letter-spacing: 3px;
+      text-align:left;
+      width:90%;
+    }
+    .btn-outline-primary {
+      background-color: #42A8A1;
+      border-color: #52A0AE;
+      color: white !important;
+    }
+  .btn-outline-primary:hover {
+      background-color: white !important;
+      color: #298780 !important;
+      border-color: #42A8A1;
     }
 
 
@@ -95,7 +114,7 @@
     <div class="flex flex-col">
         <!-- Información del médico -->
         <div class="nombreDoc rounded-xl text-white mb-2 ml-2 mt-3 text-center">
-            <div id="datos" class="flex py-0 px-5 mb-4">
+            <div id="datos" class="flex py-0 px-5 ">
                 <h2 class="nombreHospital m-0 d-inline-block p-2">{{ $paciente->nombre }} {{ $paciente->apellido }}</h2>
             </div>
         </div>
@@ -114,7 +133,7 @@
                     </p>
                   @enderror
                 </div>
-                <div class="mb-5">
+                <div class="mb-3">
                     <label for="apellido" class="form-label subtitulo mx-3 my-0">Apellido(s)</label>
                     <input type="text" class="form-control @error ('apellido') is-invalid @enderror"  value="{{old('apellido', $paciente->apellido)}}" name="apellido" id="apellido" style="border-radius: 43px; height:50px; font-size:20px;">
                     @error ('apellido')
@@ -123,7 +142,7 @@
                       </p>
                     @enderror
                 </div>
-                <div class="mb-5">
+                <div class="mb-3">
                   <label for="fecha_nacimiento" class="form-label subtitulo mx-3 my-0">Fecha de Nacimiento</label>
                   <input type="date" class="form-control @error ('fecha_nacimiento') is-invalid @enderror"  value="{{old('fecha_nacimiento', $paciente->fecha_nacimiento)}}" name="fecha_nacimiento" id="fecha_nacimiento" style="border-radius: 43px; height:50px; font-size:20px;">
                   @error ('fecha_nacimiento')
@@ -132,7 +151,7 @@
                     </p>
                   @enderror
                 </div>
-                <div class="mb-5">
+                <div class="mb-3">
                   <label for="telefono" class="form-label subtitulo mx-3 my-0">Telefono</label>
                   <input type="text" class="form-control @error ('telefono') is-invalid @enderror"  value="{{old('telefono', $usuario->telefono)}}" name="telefono" id="telefono" style="border-radius: 43px; height:50px; font-size:20px;">
                   @error ('telefono')
@@ -188,7 +207,7 @@
                 </div>
                 <!-- Botón de envío -->
                 <div class="d-flex justify-content-center align-items-center">
-                  <button type="submit" class="btn btn-primary boton">Guardar Cambios</button>
+                  <button type="submit" class="btn btn-outline-primary boton">Guardar Cambios</button>
                 </div>
               </form>
               <!-- Fin del formulario -->

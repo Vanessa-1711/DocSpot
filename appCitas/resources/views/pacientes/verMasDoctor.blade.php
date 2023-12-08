@@ -56,7 +56,8 @@
         padding: 10px; 
         font-size: 20px; 
         margin-left: 45%; 
-        border-radius: 10px
+        border-radius: 10px;
+        height:auto;
     }
     .otroDiv {
         width: 55%; 
@@ -136,7 +137,7 @@
     <div class="flex flex-col">
         <!-- Información del médico -->
         <div class="nombreDoc rounded-xl text-white mb-2 ml-2 mt-3 text-center">
-            <div id="datos" class="flex py-0 px-5 mb-4">
+            <div id="datos" class="flex py-0 px-5 ">
                 <h2 class="nombreHospital m-0 d-inline-block p-2">{{ $medico->nombre }} {{ $medico->apellido }}</h2>
             </div>
         </div>
