@@ -89,16 +89,27 @@
     .image-input-container input[type="file"] {
         display: none;
     }
+    #example td img {
+    width: auto; /* La imagen se ajustará automáticamente a la altura del contenedor */
+    height: 100%; /* La imagen ocupará el 100% de la altura del contenedor */
+    border-radius: 17px; /* Ajusta el radio de la esquina según tus preferencias */
+}
+
 </style>
-<div class="container-fluid mt-5">
+<div class="container-fluid p-0 mt-5 d-flex justify-content-center align-items-center">
+    <a href="{{ route('hospital.vermasDoc', ['id' => $doctor->id]) }}" class="w-100 btn btn-link text-decoration-none m-0" style="text-align: left; color: #42A8A1">
+        <i class="fas fa-arrow-left"></i> Volver
+    </a>
+</div>
+<div class="container-fluid mt-5 ">
     <div class="row">
         <div class="col-md-6">
             <!-- Contenido de la columna izquierda (card, formulario, etc.) -->
             <div class="card p-4" style="height: 100%">
                 <div class="mb-5 justify-center mt-2">
-                    <h5 class=" text-center titulo" >Registrar Doctor</h5>
+                    <h5 class=" text-center titulo" >Editar Doctor</h5>
                 </div>
-                <form action="{{route('hospital.agregarDoc')}}" method="POST" novalidate enctype="multipart/form-data">
+                <form action="{{route('hospital.actualizarDoc', ['id' => $doctor->id]) }}" method="POST" novalidate enctype="multipart/form-data">
                     @csrf
                     @error('mensaje')
                       <script>
@@ -117,7 +128,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="nombre" class="subtitulo">Nombre</label>
-                                <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre" value="{{ old('nombre') }}">
+                                <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre" value="{{ old('nombre', $doctor->nombre) }}">
                                 @error('nombre')
                                     <p class="invalid-feedback">{{ $message }}</p>
                                 @enderror
@@ -125,7 +136,7 @@
   
                           <div class="mb-5">
                             <label for="fecha_nacimiento" class="form-label subtitulo mx-3 my-0">Fecha de Nacimiento</label>
-                            <input type="date" class="form-control @error ('fecha_nacimiento') is-invalid @enderror"  value="{{old('fecha_nacimiento')}}" name="fecha_nacimiento" id="fecha_nacimiento">
+                            <input type="date" class="form-control @error ('fecha_nacimiento') is-invalid @enderror"  value="{{ old('fecha_nacimiento', $doctor->fecha_nacimiento) }}" name="fecha_nacimiento" id="fecha_nacimiento">
                             @error ('fecha_nacimiento')
                               <p class="invalid-feedback" >
                                   {{$message}}
@@ -134,7 +145,7 @@
                           </div>
                           <div class="mb-5">
                                 <label for="telefono" class="form-label subtitulo mx-3 my-0">Telefono</label>
-                                <input type="text" class="form-control @error ('telefono') is-invalid @enderror" name="telefono" id="telefono" value="{{ old('telefono') }}">
+                                <input type="text" class="form-control @error ('telefono') is-invalid @enderror" name="telefono" id="telefono" value="{{ old('telefono', $doctor->user->telefono) }}">
                                 @error ('telefono')
                                     <p class="invalid-feedback">
                                         {{ $message }}
@@ -156,14 +167,14 @@
                         <div class="col-md-6">
                             <div class="mb-5">
                                 <label for="apellido" class="subtitulo">Apellido</label>
-                                <input type="text" class="form-control @error('apellido') is-invalid @enderror" id="apellido" name="apellido" value="{{ old('apellido') }}">
+                                <input type="text" class="form-control @error('apellido') is-invalid @enderror" id="apellido" name="apellido" value="{{ old('apellido', $doctor->apellido) }}">
                                 @error('apellido')
                                     <p class="invalid-feedback">{{ $message }}</p>
                                 @enderror
                             </div>
                           <div class="mb-3">
                             <label for="username" class="form-label subtitulo mx-3 my-0">Username</label>
-                            <input type="text" class="form-control @error ('username') is-invalid @enderror"  value="{{old('username')}}"  name="username"  id="username">
+                            <input type="text" class="form-control @error ('username') is-invalid @enderror"  value="{{ old('username', $doctor->user->username) }}"  name="username"  id="username">
                             @error ('username')
                               <p class="invalid-feedback" >
                                   {{$message}}
@@ -173,17 +184,8 @@
                           <!-- ... -->
                           <div class="mb-3">
                             <label for="email" class="form-label subtitulo mx-3 my-0">Correo electrónico</label>
-                            <input type="email" class="form-control @error ('email') is-invalid @enderror"  value="{{old('email')}}" name="email" id="email">
+                            <input type="email" class="form-control @error ('email') is-invalid @enderror"  value="{{ old('email', $doctor->user->email) }}" name="email" id="email">
                             @error ('email')
-                              <p class="invalid-feedback" >
-                                  {{$message}}
-                              </p>
-                            @enderror
-                          </div>
-                          <div class="mb-3">
-                            <label for="password_confirmation" class="form-label subtitulo mx-3 my-0">Confirmar contraseña</label>
-                            <input type="password" class="form-control @error ('password_confirmation') is-invalid @enderror"  value="{{old('password_confirmation')}}" name="password_confirmation" id="password_confirmation">
-                            @error ('password_confirmation')
                               <p class="invalid-feedback" >
                                   {{$message}}
                               </p>
@@ -191,46 +193,44 @@
                           </div>
                         </div>
                         <div class="row mb-3">
-                          <!-- Checkboxes para días de la semana -->
-                          <div class="col-md-6">
-                              <div class="mb-3">
-                                  <label class="subtitulo" for="dia">Seleccionar Días</label>
-                                  @foreach(['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'] as $dia)
-                                      <div class="form-check">
-                                          <input class="form-check-input @error('checkboxDias') is-invalid @enderror" type="checkbox" id="checkbox{{ $dia }}" name="checkboxDias[]" value="{{ $dia }}">
-                                          <label class="form-check-label" for="checkbox{{ $dia }}">{{ $dia }}</label>
-                                      </div>
-                                  @endforeach
-                                  @error('checkboxDias')
-                                      <div class="invalid-feedback">{{ $message }}</div>
-                                  @enderror
-                              </div>
-                          </div>
-                      
-                          <!-- Campos de hora (inicial y final) -->
-                          <div class="col-md-6">
-                              @foreach(['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'] as $dia)
-                                  <div id="horas{{ $dia }}" style="display: none;">
-                                      <div class="mb-3">
-                                          <label for="horaInicio{{ $dia }}" class="form-label subtitulo mx-3 my-0">Hora de Entrada ({{ $dia }})</label>
-                                          <input type="time" class="form-control @error('horaInicio.' . $dia) is-invalid @enderror" id="horaInicio{{ $dia }}" name="horaInicio[{{ $dia }}]">
-                                          @error('horaInicio.' . $dia)
-                                              <div class="invalid-feedback">{{ $message }}</div>
-                                          @enderror
-                                      </div>
-                                      <div class="mb-3">
-                                          <label for="horaFinal{{ $dia }}" class="form-label subtitulo mx-3 my-0">Hora de Salida ({{ $dia }})</label>
-                                          <input type="time" class="form-control @error('horaFinal.' . $dia) is-invalid @enderror" id="horaFinal{{ $dia }}" name="horaFinal[{{ $dia }}]">
-                                          @error('horaFinal.' . $dia)
-                                              <div class="invalid-feedback">{{ $message }}</div>
-                                          @enderror
-                                      </div>
-                                  </div>
-                              @endforeach
-                          </div>
-                      </div>
-                      
-  
+                            <!-- Checkboxes para días de la semana -->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="subtitulo" for="dia">Seleccionar Días</label>
+                                    @foreach(['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'] as $dia)
+                                        <div class="form-check">
+                                            <input class="form-check-input @error('checkboxDias') is-invalid @enderror" type="checkbox" id="checkbox{{ $dia }}" name="checkboxDias[]" value="{{ $dia }}" {{ in_array($dia, old('checkboxDias', $horarios->pluck('dia')->toArray())) ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="checkbox{{ $dia }}">{{ $dia }}</label>
+                                        </div>
+                                    @endforeach
+                                    @error('checkboxDias')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        
+                            <!-- Campos de hora (inicial y final) -->
+                            <div class="col-md-6">
+                                @foreach(['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'] as $dia)
+                                    <div id="horas{{ $dia }}" style="display: {{ in_array($dia, old('checkboxDias', $horarios->pluck('dia')->toArray())) ? 'block' : 'none' }};">
+                                        <div class="mb-3">
+                                            <label for="horaInicio{{ $dia }}" class="form-label subtitulo mx-3 my-0">Hora de Entrada ({{ $dia }})</label>
+                                            <input type="time" class="form-control @error('horaInicio.' . $dia) is-invalid @enderror" id="horaInicio{{ $dia }}" name="horaInicio[{{ $dia }}]" value="{{ old('horaInicio.' . $dia, $horarios->where('dia', $dia)->first()->hora_inicio ?? '') }}">
+                                            @error('horaInicio.' . $dia)
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="horaFinal{{ $dia }}" class="form-label subtitulo mx-3 my-0">Hora de Salida ({{ $dia }})</label>
+                                            <input type="time" class="form-control @error('horaFinal.' . $dia) is-invalid @enderror" id="horaFinal{{ $dia }}" name="horaFinal[{{ $dia }}]" value="{{ old('horaFinal.' . $dia, $horarios->where('dia', $dia)->first()->hora_fin ?? '') }}">
+                                            @error('horaFinal.' . $dia)
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>                        
                       </div>
 
                     <div class=" mt-2 d-flex justify-content-center align-items-center">
@@ -239,9 +239,9 @@
                 </form>
             </div>
         </div>
-        <div class="col-md-6"  style="height: 500% !important;">
+        <div class="col-md-6"  style="height: 100%;">
             <!-- Contenido de la columna derecha (imagen, etc.) -->
-            <img style="border-radius:15px" src="{{ asset('img/doc3.png') }}" alt="Imagen" class="img-fluid">
+            <img style="border-radius: 15px; width: 100%; height: auto; max-height: 100%;" src="{{ asset('img/doc3.png') }}" alt="Imagen" class="img-fluid">
         </div>
     </div>
 </div>

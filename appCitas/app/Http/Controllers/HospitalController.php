@@ -155,7 +155,139 @@ class HospitalController extends Controller
 
     }
 
+    public function verMasDoc($id)
+    {
 
+        $medico = Medico::with('hospital')->find($id);
+        $horarios = Horario::where('medico_id', $medico->id)->get();
+        return view('hospital.perfilDoctor', [
+            'medico' => $medico,
+            'horarios' => $horarios,
+        ]);
+    }
+
+    public function editarDoctor($id)
+    {
+        // Obtener el doctor por su ID
+        $doctor = Medico::findOrFail($id);
+        $horarios = Horario::where('medico_id', $doctor->id)->get();
+
+        // Puedes pasar el doctor a la vista para que lo muestre en el formulario de edición
+        return view('hospital.editarDoctor', ['doctor' => $doctor, 'horarios' => $horarios]);
+    }
+
+    public function actualizarDoctor(Request $request, $id)
+    {
+        $hospital = Auth::user()->hospital;
+        $medico = Medico::findOrFail($request->id);
+        $user = $medico->user;
+
+        $rules = [
+            'nombre' => 'required|regex:/^[a-zA-ZáéíóúÁÉÍÓÚÑñ\s]+$/',
+            'apellido' => 'required|regex:/^[a-zA-ZáéíóúÁÉÍÓÚÑñ\s]+$/',
+            'telefono' => 'nullable|regex:/^[0-9]+$/|max:10',
+            'fecha_nacimiento' => 'required|date|before_or_equal:today',
+            'checkboxDias' => 'required|array|min:1',
+            'checkboxDias.*' => 'in:Lunes,Martes,Miércoles,Jueves,Viernes,Sábado,Domingo',
+            'horaInicio' => 'required|array|min:1',
+            'horaFinal' => 'required|array|min:1',
+            'password' => 'nullable|min:8',
+        ];
+
+        // Agregar reglas de validación para el username y el email solo si se proporcionan
+        if ($request->filled('username')) {
+            $rules['username'] = 'required|min:3|max:20|regex:/^\S*$/u|unique:users,username,' . $user->id;
+        }
+
+        if ($request->filled('email')) {
+            $rules['email'] = 'nullable|email|max:80|unique:users,email,' . $user->id;
+        }
+
+        $this->validate($request, $rules);
+
+        // Verificar si se proporcionó una nueva contraseña
+        if ($request->filled('password')) {
+            $this->validate($request, [
+                'password' => 'required|min:8', // Puedes ajustar las reglas según tus necesidades
+            ]);
+
+            // Actualizar la contraseña solo si se proporcionó una nueva
+            $user->update([
+                'password' => Hash::make($request->password),
+            ]);
+        }
+
+        // Actualizar el usuario solo si se proporcionó un nuevo username
+        if ($request->filled('username') && $user->username !== $request->username) {
+            $user->update([
+                'username' => $request->username,
+            ]);
+        }
+
+        // Actualizar el usuario solo si se proporcionó un nuevo email
+        if ($request->filled('email') && $user->email !== $request->email) {
+            $user->update([
+                'email' => $request->email,
+            ]);
+        }
+
+        // Crear o actualizar médico
+        $medico = Medico::updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'nombre' => $request->nombre,
+                'apellido' => $request->apellido,
+                'fecha_nacimiento' => $request->fecha_nacimiento,
+                'latitud' => $hospital->latitud,
+                'longitud' => $hospital->longitud,
+                'hospital_id' => $hospital->id,
+            ]
+        );
+
+        $checkboxDias = $request->checkboxDias;
+
+        foreach ($checkboxDias as $dia) {
+            $horaInicio = $request->horaInicio[$dia];
+            $horaFin = $request->horaFinal[$dia];
+            Horario::updateOrCreate(
+                [
+                    'dia' => $dia,
+                    'medico_id' => $medico->id,
+                ],
+                [
+                    'hora_inicio' => $horaInicio,
+                    'hora_fin' => $horaFin,
+                ]
+            );
+        }
+
+        $medico = Medico::with('hospital')->find($id);
+        $horarios = Horario::where('medico_id', $medico->id)->get();
+
+        return redirect()->route('hospital.vermasDoc', [
+            'id' => $medico->id,
+            'horarios' => $horarios,
+        ])->with('mensaje', 'Médico editado exitosamente.');
+    }
+
+    public function eliminarMedico($id)
+    {
+        // Encuentra el médico por su ID
+        $medico = Medico::findOrFail($id);
+
+        // Elimina los horarios asociados al médico
+        Horario::where('medico_id', $id)->delete();
+
+        // Obtén el usuario asociado al médico
+        $usuario = $medico->user;
+
+        // Elimina el médico y el usuario
+        $medico->delete();
+        $usuario->delete();
+
+
+        // Puedes redirigir a donde desees después de la eliminación
+        return redirect()->route('hospital.docAsociados')->with('mensaje', 'Médico y usuario eliminados exitosamente.');
+    }
     
-
 }

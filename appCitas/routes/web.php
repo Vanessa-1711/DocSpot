@@ -81,3 +81,11 @@ Route::post('crear_cita/guardar', [PacienteController::class, 'guardarCita'])->n
 Route::get('hospitales/doctores/asociados', [HospitalController::class, 'asociarDocVista'])->name('hospital.docAsociados');
 Route::get('hospitales/doctores/agregar', [HospitalController::class, 'agregarDoctorVista'])->name('hospital.agregarDocVista');
 Route::post('hospitales/doctores/agregar', [HospitalController::class, 'agregarDoctor'])->name('hospital.agregarDoc');
+
+
+
+//Admin-Doctores 
+Route::get('hospitales/doctores/vermasDoc/{id}', [HospitalController::class, 'verMasDoc'])->name('hospital.vermasDoc');
+Route::get('hospitales/doctores/{id}/editar', [HospitalController::class, 'editarDoctor'])->name('hospital.editarDoc');
+Route::post('hospitales/doctores/{id}/actualizar', [HospitalController::class, 'actualizarDoctor'])->name('hospital.actualizarDoc');
+Route::get('/hospital/doctores/{doctor}/eliminar', [HospitalController::class, 'eliminarMedico'])->name('hospital.eliminarDoctor');

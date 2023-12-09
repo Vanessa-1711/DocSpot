@@ -107,7 +107,6 @@ class PacienteController extends Controller
         $horarios = Horario::where('medico_id', $medico->id)->get();
         return view('pacientes.verMasDoctor', [
             'medico' => $medico,
-            'registro'=> $registro,
             'horarios' => $horarios,
         ]);
     }
