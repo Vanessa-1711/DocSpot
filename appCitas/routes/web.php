@@ -81,3 +81,8 @@ Route::get('hospitales/doctores/asociados', [HospitalController::class, 'asociar
 Route::get('hospitales/pacientes', [HospitalController::class, 'index_pacientes'])->name('hospital.pacientes');
 Route::get('/hospital/vermasPaciente/{id}', [HospitalController::class, 'verMasPaciente'])->name('hospital.vermasPaciente');
 Route::delete('/paciente/borrar/{pacienteHospital}', [HospitalController::class, 'deletePaciente'])->name('hospital.paciente.destroy');
+
+Route::get('/medicos/pacientes', [MedicoController::class, 'index_pacientes'])->name('medico.pacientes');
+Route::get('/medicos/vermasPaciente/{id}', [MedicoController::class, 'verMasPaciente'])->name('medico.vermasPaciente');
+Route::get('/crear_cita/paciente/{doctor}', [MedicoController::class, 'crearCita'])->name('citaspaciente.crear');
+Route::post('crear_cita/guardar', [MedicoController::class, 'guardarCita'])->name('citaspaciente.guardar');

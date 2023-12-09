@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Hospitales')
+@section('title', 'Paciente')
 
 @section('aside')
     @include('layouts.aside_hospitales')
@@ -118,10 +118,10 @@
 </div>
 <div class="container-fluid p-0 mt-2 d-flex justify-content-center align-items-center">
     <div class="img-container rounded">
-        <img src="{{ asset('img/perfilDoc.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover; border-radius: 15px;" alt="Tu Imagen">
+        <img src="{{ asset('img/doc.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover; border-radius: 15px;" alt="Tu Imagen">
     </div>
     <div class="circle-container">
-        <img class="mx-0 my-0" src="{{ asset('img/doc.png') }}" alt="Foto de perfil">
+        <img class="mx-0 my-0" src="{{ asset('img/marie.jpg') }}" alt="Foto de perfil">
     </div>
     
 </div>
