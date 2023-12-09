@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Hospitales')
+@section('title', 'Paciente')
 
 @section('aside')
     @include('layouts.aside_medicos')
