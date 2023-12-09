@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="apple-touch-icon" sizes="76x76" href={{asset('img/apple-icon.png')}}>
   <link rel="icon" type="image/png" href={{asset('img/favicon.png')}}>
+  <link rel="icon" type="image/png" href={{asset('img/logos/hos.png')}}>
+  
   <title>
     Registrarse
   </title>
@@ -37,7 +39,6 @@
     }
     .cont {
       display: flex;
-      position: fixed;
       top: 0;
       bottom: 0;
       width: 100%;
@@ -133,7 +134,22 @@
       opacity: 1; /* Hace que el texto sea visible al pasar el cursor por encima */
     }
 
-
+    .navbar-fija {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1030;
+    }
+    .btn-outline-primary:hover {
+      background-color: #42A8A1;
+      color: #298780 !important;
+      border-color: #42A8A1;
+    }
+    .btn-outline-primary {
+      background-color: #42A8A1;
+      border-color: #52A0AE;
+      color: white !important;
+    }
 
 
 
@@ -143,7 +159,22 @@
 </head>
 
 <body class="bg-white">
-<div class="cont">
+<div class="navbar-fija">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light align-items-center">
+    <div class="container-fluid">
+      <!-- Logo a la izquierda -->
+      <a class="navbar-brand m-0"  href="/">
+        <img src="{{ asset('img/logos/hos.png') }}" class="navbar-brand-img h-100" alt="main_logo" style="width: 50px;">
+        <span class="ms-1 text-white font-weight-bold" style="font-size: 22px;">DocSpot</span>
+      </a>
+      <!-- Botones "Sign In" y "Sign Up" a la derecha -->
+      <div class="navbar-nav ml-auto">
+        <a href="{{route('login')}}" class="btn btn-outline-primary m-2" style="color:white">Iniciar Sesión</a>
+      </div>
+    </div>
+  </nav>
+</div>
+<div class="cont mt-5" style="height:100vh">
     <div class="cont-2" style="background-image:url('{{asset('img/doc2.png')}}') "></div>
     <div class="cont-2 p-5">
       <div class="container">
@@ -170,9 +201,7 @@
           </div>
         </div>
       </div>
-      <div class="mb-0  d-flex justify-content-center align-items-center">
-        <a href="{{route('login')}}" class="btn btn-primary boton" style="margin-top:10px; background-color:rgb(65, 140, 167);color:white" >INICIAR SESIÓN</a>
-      </div>
+    
       </div>
   
     </div>

@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Medico;
 use App\Models\Hospital;
 use App\Models\Paciente;
+<<<<<<< HEAD
 use App\Models\Horario;
 use App\Models\PacienteHospital;
 use App\Models\User;
 use App\Models\Medico;
 use Illuminate\Support\Facades\Hash;
+=======
+>>>>>>> 4f6a088c99cae6d385db203ade05bec352d864f2
 use Illuminate\Http\Request;
+use App\Models\PacienteHospital;
 use Illuminate\Support\Facades\Auth;
 
 class HospitalController extends Controller
@@ -21,14 +26,68 @@ class HospitalController extends Controller
     
     public function index()
     {
-        return view('hospital.dashboard');
+        $usuario = auth()->user();
+        
+        // Obtener el hospital asociado al usuario autenticado
+        $hospital = Hospital::where('user_id', $usuario->id)->first();
+    
+        $pacientes = Paciente::all();
+        // Verificar si se encontró un hospital
+        // if (!$hospital) {
+        //     // Redirigir o mostrar un mensaje si el hospital no se encuentra
+        //     return redirect()->route('nombre.de.la.ruta.alguna')->with('error', 'Hospital no encontrado.');
+        // }
+    
+        // Calcular la cantidad de pacientes asociados al hospital
+        $cantidadPacientesAsociados = PacienteHospital::where('hospital_id', $hospital->id)
+                                                       ->count();
+    
+        // Obtener los médicos asociados al hospital
+        $medicos = Medico::where('hospital_id', $hospital->id)->get();
+        $cantidadMedicosHospital = $medicos->count();
+    
+        // Pasar los datos a la vista
+        return view('hospital.dashboard', [
+            'cantidadPacientesAsociados' => $cantidadPacientesAsociados,
+            'cantidadMedicosHospital' => $cantidadMedicosHospital,
+            'medicos' => $medicos,
+            'pacientes' => $pacientes,
+            // Puedes añadir más datos aquí según sea necesario
+        ]);
     }
 
     public function asociarVista()
     {
-        $hospitalPaciente = PacienteHospital::all();
+        $hospitalPaciente = PacienteHospital::whereNull('paciente_id')->get();
         return view('hospital.asociar', ['hospitalPaciente' => $hospitalPaciente]);
     }
+    public function index_pacientes(){
+        $usuario = auth()->user();
+        $hospital = Hospital::where('user_id', $usuario->id)->first();
+
+        if ($hospital) {
+            $pacientesIds = PacienteHospital::where('hospital_id', $hospital->id)
+                ->pluck('paciente_id')
+                ->toArray();
+
+            $pacientes = Paciente::whereIn('id', $pacientesIds)->get();
+
+            return view('hospital.pacientes', [
+                'cantidadHospitales' => $pacientes->count(),
+                'nombresPacientes' => $pacientes,
+            ]);
+        }
+
+    }
+    public function verMasPaciente($id)
+    {
+
+        $paciente = Paciente::find($id);
+        return view('hospital.vermasPaciente', [
+            'paciente' => $paciente,
+        ]);
+    }
+
     
     public function agregar(){
 
@@ -74,6 +133,20 @@ class HospitalController extends Controller
 
         return redirect()->route('hospital.asociar')->with('success', 'Paciente eliminado correctamente.');
     }
+    public function deletePaciente(Request $request, $pacienteHospitalId){
+        
+        $pacienteHospital = PacienteHospital::where('paciente_id', $pacienteHospitalId)->first();
+
+     
+        if ($pacienteHospital) {
+            // Continúa con el proceso de eliminación
+            $pacienteHospital->delete();
+            return redirect()->route('hospital.pacientes')->with('success', 'Paciente eliminado correctamente.');
+        } else {
+            return redirect()->route('hospital.pacientes')->with('error', 'No se pudo encontrar el registro del paciente.');
+        }
+    }
+    
 
     public function asociarDocVista()
     {

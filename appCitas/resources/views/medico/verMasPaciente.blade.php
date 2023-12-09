@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Hospitales')
+@section('title', 'Paciente')
 
 @section('aside')
-    @include('layouts.aside_pacientes')
+    @include('layouts.aside_medicos')
 @endsection
 
 @section('content')
@@ -112,24 +112,18 @@
 
 </style>
 <div class="container-fluid p-0 mt-5 d-flex justify-content-center align-items-center">
-    <a href="{{ route('pacientes.vermas', ['id' => $medico->hospital_id]) }}" class="w-100 btn btn-link text-decoration-none m-0" style="text-align: left; color: #42A8A1">
+    <a href="{{ route('medico.pacientes')}}" class="w-100 btn btn-link text-decoration-none m-0" style="text-align: left; color: #42A8A1">
         <i class="fas fa-arrow-left"></i> Volver
     </a>
 </div>
 <div class="container-fluid p-0 mt-2 d-flex justify-content-center align-items-center">
     <div class="img-container rounded">
-        <img src="{{ asset('img/perfilDoc.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover; border-radius: 15px;" alt="Tu Imagen">
+        <img src="{{ asset('img/doc.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover; border-radius: 15px;" alt="Tu Imagen">
     </div>
     <div class="circle-container">
-        <img class="mx-0 my-0" src="{{ asset('img/doc.png') }}" alt="Foto de perfil">
+        <img class="mx-0 my-0" src="{{ asset('img/marie.jpg') }}" alt="Foto de perfil">
     </div>
-    <div class="mapa circle-container-mapa">
-    @if($medico->hospital_id)
-        <div id="map" data-lat="{{$medico->hospital->latitud}}" data-lng="{{$medico->hospital->longitud}}"></div>
-    @else
-        <div id="map" data-lat="{{$medico->latitud}}" data-lng="{{$medico->longitud}}"></div>
-    @endif
-    </div>
+    
 </div>
 
 <div class="flex w-full justify-center items-center px-6 mt-4">
@@ -138,7 +132,7 @@
         <!-- Información del médico -->
         <div class="nombreDoc rounded-xl text-white mb-2 ml-2 mt-3 text-center">
             <div id="datos" class="flex py-0 px-5 ">
-                <h2 class="nombreHospital m-0 d-inline-block p-2">{{ $medico->nombre }} {{ $medico->apellido }}</h2>
+                <h2 class="nombreHospital m-0 d-inline-block p-2">{{ $paciente->nombre }} {{ $paciente->apellido }}</h2>
             </div>
         </div>
 
@@ -148,37 +142,23 @@
             <div style="margin-bottom: 10px;">
                 <i class="fas fa-envelope fa-lg"></i> <strong>Correo:</strong>
                 <br>
-                <span style="font-weight: normal;">{{ $medico->user->email }}</span>
+                <span style="font-weight: normal;">{{ $paciente->user->email }}</span>
             </div>
             <div style="margin-bottom: 10px;">
                 <i class="fas fa-phone fa-lg"></i> <strong>Teléfono:</strong>
                 <br>
-                <span style="font-weight: normal;">{{ $medico->user->telefono }}</span>
+                <span style="font-weight: normal;">{{ $paciente->user->telefono }}</span>
             </div>
-            <div>
-                <i class="far fa-clock fa-lg"></i> <strong>Horarios:</strong>
+            <div style="margin-bottom: 10px;">
+                <i class="fas fa-calendar fa-lg"></i> <strong>Fecha de Nacimiento:</strong>
                 <br>
-                <div class="row">
-                    <div class="col-md-6">
-                        <!-- Primeras 4 horas -->
-                        @foreach($horarios->take(4) as $horario)
-                            <span>{{ $horario->dia }}: {{ $horario->hora_inicio }} - {{ $horario->hora_fin }}</span><br>
-                        @endforeach
-                    </div>
-                    <div class="col-md-6">
-                        <!-- Últimas 3 horas -->
-                        @foreach($horarios->slice(4) as $horario)
-                            <span>{{ $horario->dia }}: {{ $horario->hora_inicio }} - {{ $horario->hora_fin }}</span><br>
-                        @endforeach
-                    </div>
-                </div>
-                
-            <br>
-            <!-- Botón "Agendar Cita" con icono -->
-            <a href="{{ route('citas.crear', ['doctor' => $medico->id]) }}" class="btn btn-lg mt-1 btn-success btn-white">
+                <span style="font-weight: normal;">{{ $paciente->fecha_nacimiento }}</span>
+            </div>
+
+            <a href="{{ route('citaspaciente.crear', ['doctor' => $paciente->id]) }}" class="btn btn-lg mt-1 btn-success btn-white">
                 <i class="fas fa-calendar-plus"></i> Agendar Cita
             </a>
-            
+          
             
         </div>
         
@@ -186,52 +166,6 @@
 </div>
 
 
-
-
-
-
-
-
-<script>
-    let map;
-
-    function initMap() {
-        // Opciones del mapa
-        const map = new google.maps.Map(document.getElementById('map'), {
-            center: { lat: 0, lng: 0 },
-            zoom: 14,
-            mapId: "c984a1c2512b6347",
-            styles: [
-                {
-                    "featureType": "poi",
-                    "elementType": "labels",
-                    "stylers": [
-                        { "visibility": "off" }
-                    ]
-                }
-            ]
-        });
-
-        const latitud = parseFloat(document.getElementById('map').dataset.lat);
-        const longitud = parseFloat(document.getElementById('map').dataset.lng);
-
-        const medicoMarker = new google.maps.Marker({
-            position: { lat: latitud, lng: longitud },
-            map: map,
-            title: "Ubicación del médico",
-        });
-
-        map.setCenter({ lat: latitud, lng: longitud });
-
-
-        // Mostrar las coordenadas en el título del marcador
-        medicoMarker.setTitle("Ubicación del medico - Latitud: " + latitud + ", Longitud: " + longitud);
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        initMap();
-    });
-</script>
 
 
 @endsection

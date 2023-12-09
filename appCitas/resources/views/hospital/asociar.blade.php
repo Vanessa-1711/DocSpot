@@ -170,7 +170,7 @@
     $(document).ready( function () {
         $('#myTable').DataTable({
             language: {
-                emptyTable: "Aún no hay pacientes que mostrar."
+                emptyTable: "Aún no hay pacientes sin asociar que mostrar."
             }
         });
 
