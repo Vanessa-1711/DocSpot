@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Medico;
 use App\Models\Hospital;
 use App\Models\Paciente;
-use App\Models\PacienteHospital;
 use Illuminate\Http\Request;
+use App\Models\PacienteHospital;
 use Illuminate\Support\Facades\Auth;
 
 class HospitalController extends Controller
@@ -17,7 +18,34 @@ class HospitalController extends Controller
     
     public function index()
     {
-        return view('hospital.dashboard');
+        $usuario = auth()->user();
+        
+        // Obtener el hospital asociado al usuario autenticado
+        $hospital = Hospital::where('user_id', $usuario->id)->first();
+    
+        $pacientes = Paciente::all();
+        // Verificar si se encontró un hospital
+        // if (!$hospital) {
+        //     // Redirigir o mostrar un mensaje si el hospital no se encuentra
+        //     return redirect()->route('nombre.de.la.ruta.alguna')->with('error', 'Hospital no encontrado.');
+        // }
+    
+        // Calcular la cantidad de pacientes asociados al hospital
+        $cantidadPacientesAsociados = PacienteHospital::where('hospital_id', $hospital->id)
+                                                       ->count();
+    
+        // Obtener los médicos asociados al hospital
+        $medicos = Medico::where('hospital_id', $hospital->id)->get();
+        $cantidadMedicosHospital = $medicos->count();
+    
+        // Pasar los datos a la vista
+        return view('hospital.dashboard', [
+            'cantidadPacientesAsociados' => $cantidadPacientesAsociados,
+            'cantidadMedicosHospital' => $cantidadMedicosHospital,
+            'medicos' => $medicos,
+            'pacientes' => $pacientes,
+            // Puedes añadir más datos aquí según sea necesario
+        ]);
     }
 
     public function asociarVista()
