@@ -99,4 +99,4 @@ Route::delete('/paciente/borrar/{pacienteHospital}', [HospitalController::class,
 Route::get('/medicos/pacientes', [MedicoController::class, 'index_pacientes'])->name('medico.pacientes');
 Route::get('/medicos/vermasPaciente/{id}', [MedicoController::class, 'verMasPaciente'])->name('medico.vermasPaciente');
 Route::get('/crear_cita/paciente/{doctor}', [MedicoController::class, 'crearCita'])->name('citaspaciente.crear');
-Route::post('crear_cita/guardar', [MedicoController::class, 'guardarCita'])->name('citaspaciente.guardar');
+// Route::post('crear_cita/guardar', [MedicoController::class, 'guardarCita'])->name('citaspaciente.guardar');
