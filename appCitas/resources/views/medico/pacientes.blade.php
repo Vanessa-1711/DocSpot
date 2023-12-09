@@ -73,7 +73,7 @@
                         
                         <div class="card-btn mt-2 d-flex justify-content-between mt-2">
                           <a href="{{ route('medico.vermasPaciente', ['id' => $nombre->id]) }}" class="btn btn-sm px-4 py-2" style="background-color: #42A8A1; color: #ffffff; margin-right: 5px; align-items: center;justify-content: center;"><i class="fas fa-eye"></i> Ver más</a>
-                          <a href="{{ route('citas.crear', ['doctor' => $nombre->id]) }}" class="btn btn-sm btn-citas px-4 py-2" style="background-color: #42A8A1; color: #ffffff; border-color: #42A8A1;  align-items: center;justify-content: center;"><i class="far fa-calendar-alt"></i> Cita</a>
+                          <a href="{{ route('citaspaciente.crear', ['doctor' => $nombre->id]) }}" class="btn btn-sm btn-citas px-4 py-2" style="background-color: #42A8A1; color: #ffffff; border-color: #42A8A1;  align-items: center;justify-content: center;"><i class="far fa-calendar-alt"></i> Cita</a>
                       </div>
                         
                     </div>
