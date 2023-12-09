@@ -5,14 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Medico;
 use App\Models\Hospital;
 use App\Models\Paciente;
-<<<<<<< HEAD
 use App\Models\Horario;
-use App\Models\PacienteHospital;
 use App\Models\User;
-use App\Models\Medico;
 use Illuminate\Support\Facades\Hash;
-=======
->>>>>>> 4f6a088c99cae6d385db203ade05bec352d864f2
 use Illuminate\Http\Request;
 use App\Models\PacienteHospital;
 use Illuminate\Support\Facades\Auth;

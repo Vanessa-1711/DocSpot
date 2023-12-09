@@ -79,7 +79,7 @@ Route::post('crear_cita/guardar', [PacienteController::class, 'guardarCita'])->n
 
 //Hospital-Doctores
 Route::get('hospitales/doctores/asociados', [HospitalController::class, 'asociarDocVista'])->name('hospital.docAsociados');
-<<<<<<< HEAD
+
 Route::get('hospitales/doctores/agregar', [HospitalController::class, 'agregarDoctorVista'])->name('hospital.agregarDocVista');
 Route::post('hospitales/doctores/agregar', [HospitalController::class, 'agregarDoctor'])->name('hospital.agregarDoc');
 
@@ -90,7 +90,7 @@ Route::get('hospitales/doctores/vermasDoc/{id}', [HospitalController::class, 've
 Route::get('hospitales/doctores/{id}/editar', [HospitalController::class, 'editarDoctor'])->name('hospital.editarDoc');
 Route::post('hospitales/doctores/{id}/actualizar', [HospitalController::class, 'actualizarDoctor'])->name('hospital.actualizarDoc');
 Route::get('/hospital/doctores/{doctor}/eliminar', [HospitalController::class, 'eliminarMedico'])->name('hospital.eliminarDoctor');
-=======
+
 
 Route::get('hospitales/pacientes', [HospitalController::class, 'index_pacientes'])->name('hospital.pacientes');
 Route::get('/hospital/vermasPaciente/{id}', [HospitalController::class, 'verMasPaciente'])->name('hospital.vermasPaciente');
@@ -100,4 +100,3 @@ Route::get('/medicos/pacientes', [MedicoController::class, 'index_pacientes'])->
 Route::get('/medicos/vermasPaciente/{id}', [MedicoController::class, 'verMasPaciente'])->name('medico.vermasPaciente');
 Route::get('/crear_cita/paciente/{doctor}', [MedicoController::class, 'crearCita'])->name('citaspaciente.crear');
 Route::post('crear_cita/guardar', [MedicoController::class, 'guardarCita'])->name('citaspaciente.guardar');
->>>>>>> 4f6a088c99cae6d385db203ade05bec352d864f2
