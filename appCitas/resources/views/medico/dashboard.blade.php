@@ -10,6 +10,53 @@
 <div class="container">
         <!-- Estilos personalizados -->
     <style>
+        .dataTables_wrapper .dataTables_filter input {
+        color: gray !important;
+        border-radius: 20px !important;
+        margin-left: 10px !important;
+        outline-offset: 0px !important;
+    }
+    .dataTables_wrapper .dataTables_filter input:focus{
+        border-radius: 20px !important;
+        margin-left: 10px !important;
+        outline-offset: 0px !important;
+        border: 1px solid gray !important;
+        outline: none !important;
+        padding: 5px 15px !important;
+    }
+    .dataTables_wrapper .dataTables_length select {
+
+        outline-offset: 0px !important;
+        outline: none !important;
+    }
+
+    input[type="search"]::-webkit-search-cancel-button {
+        display: none !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        border-radius: 50px !important;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+        color: white !important;
+        background: #52a0ae  !important;
+        border: 1px #52a0ae solid !important;
+        border-radius:50px  !important;
+
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+        border: 1px solid transparent  !important;
+        background: #a2e7c8 !important;
+        color:white !important;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+        cursor: default !important;
+        color: #666 !important;
+        border: 1px solid transparent !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
         .hover-float {
             transition: box-shadow 0.3s, transform 0.3s;
             box-shadow: 0 8px 12px 0 rgba(0,0,0,0.2);
@@ -36,12 +83,7 @@
             overflow: hidden;
         }
 
-        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-            color: white !important;
-            background: #52a0ae !important;
-            border: 1px #52a0ae solid !important;
-            border-radius: 5px !important;
-        }
+      
 
         </style>
     <!-- Tarjetas de Resumen -->
@@ -109,12 +151,13 @@
 
 @push('scripts')
     <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <!-- jQuery -->
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!-- DataTables CSS y JS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css" />
-    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+<!-- DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

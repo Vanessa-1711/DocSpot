@@ -224,7 +224,7 @@
             <div class="card-body p-0 w-100 mb-4 " >
               <div class="w-100 imga justify-content-center align-items-start py-0 px-0" >
                 <!--aqui formulario-->
-                <form action="{{route('hospital.agregarDoc')}}" class="px-4" style="width: 100%;" method="post" novalidate>
+                <form action="{{route('store_pacientes')}}" class="px-4" style="width: 100%;" method="post" novalidate>
                   @csrf
                     <div class="row mb-3">
 

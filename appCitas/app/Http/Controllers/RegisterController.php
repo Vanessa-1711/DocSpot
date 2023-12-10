@@ -33,7 +33,41 @@ class RegisterController extends Controller
             'password' => 'required|confirmed|min:6',
             'password_confirmation' => 'required',
             'curp' => 'required|unique:pacientes|regex:/^[a-zA-Z0-9]{18}$/'
+        ], [
+            'nombre.required' => 'El nombre es obligatorio.',
+            'nombre.regex' => 'El nombre solo puede contener letras y espacios.',
+        
+            'apellido.required' => 'El apellido es obligatorio.',
+            'apellido.regex' => 'El apellido solo puede contener letras y espacios.',
+        
+            'telefono.regex' => 'El teléfono solo puede contener números.',
+            'telefono.max' => 'El teléfono no puede tener más de 10 dígitos.',
+        
+            'fecha_nacimiento.required' => 'La fecha de nacimiento es obligatoria.',
+            'fecha_nacimiento.date' => 'La fecha de nacimiento debe ser una fecha válida.',
+            'fecha_nacimiento.before_or_equal' => 'La fecha de nacimiento debe ser anterior o igual a la fecha actual.',
+        
+            'username.required' => 'El nombre de usuario es obligatorio.',
+            'username.unique' => 'Este nombre de usuario ya está en uso.',
+            'username.min' => 'El nombre de usuario debe tener al menos :min caracteres.',
+            'username.max' => 'El nombre de usuario no puede tener más de :max caracteres.',
+            'username.regex' => 'El nombre de usuario no puede contener espacios.',
+        
+            'email.email' => 'El formato del correo electrónico no es válido.',
+            'email.max' => 'El correo electrónico no puede tener más de :max caracteres.',
+            'email.unique' => 'Este correo electrónico ya está en uso en nuestro sistema.',
+        
+            'password.required' => 'La contraseña es obligatoria.',
+            'password.confirmed' => 'Las contraseñas no coinciden.',
+            'password.min' => 'La contraseña debe tener al menos :min caracteres.',
+        
+            'password_confirmation.required' => 'La confirmación de la contraseña es obligatoria.',
+        
+            'curp.required' => 'La CURP es obligatoria.',
+            'curp.unique' => 'Esta CURP ya está registrada.',
+            'curp.regex' => 'La CURP debe tener 18 caracteres alfanuméricos.'
         ]);
+        
 
         //Invocar el modelo User para crear el registro
 

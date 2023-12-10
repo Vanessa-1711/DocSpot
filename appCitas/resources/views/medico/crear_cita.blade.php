@@ -75,14 +75,14 @@
                                 @php
                                     $selectedMedico = old('medicos');
                                 @endphp
-                                @foreach($medicosDelMismoHospital as $med)
+                                @foreach($pacientesDelMismoHospital as $med)
                                     <option value="{{ $med->id }}" {{ $med->id == $selectedMedico ? 'selected' : '' }}>{{ $med->nombre }}</option>
                                 @endforeach
                             @else
-                                <option value="{{ $medico->id }}" selected>{{ $medico->nombre }}</option>
-                                @foreach($medicosDelMismoHospital as $med)
+                                <option value="{{ $paciente->id }}" selected>{{ $paciente->nombre }}</option>
+                                @foreach($pacientesDelMismoHospital as $med)
                                     <!-- Verifica si no es el médico seleccionado -->
-                                    @if($med->id !== $medico->id)
+                                    @if($med->id !== $paciente->id)
                                         <option value="{{ $med->id }}">{{ $med->nombre }}</option>
                                     @endif
                                 @endforeach
@@ -94,7 +94,7 @@
                             </p>
                         @enderror
                     </div>
-
+                    <input name="medico_id"  id="medico_id" value="{{$medico_id}}" style="display:none">
 
                     <!--calendario y hora-->
                                     <!-- HTML para la selección de fecha y hora por separado -->
@@ -163,9 +163,10 @@
             // Realizar la solicitud AJAX para obtener las horas disponibles
             $.ajax({
                 type: "GET",
-                url: "{{ route('ruta.obtenerHorasDisponibles', ['fecha' => ':fecha', 'medico_id' => ':medico_id']) }}"
+                url: "{{ route('paciente.obtenerHorasDisponibles', ['fecha' => ':fecha', 'medico_id' => ':medico_id','paciente_id' => ':paciente_id']) }}"
                     .replace(':fecha', fecha)
-                    .replace(':medico_id', $('#medicos').val()),
+                    .replace(':medico_id', $('#medico_id').val())
+                    .replace(':paciente_id', $('#medicos').val()),
                 success: function(response) {
                     console.log(response);
                     if (!response || response.length === 0) {
@@ -222,18 +223,19 @@ $(document).ready(function() {
         
         // Hacer la llamada AJAX al cambiar la fecha seleccionada
         $('#fecha').change(function() {
-            console.log("aqui");
             var fechaSeleccionada = $(this).val();
-            var medicoId = $('#medicos').val();
-            console.log("{{ route('ruta.obtenerHorasDisponibles', ['fecha' => ':fecha', 'medico_id' => ':medico_id']) }}"
+            var medicoId = $('#medico_id').val();
+            console.log("{{ route('paciente.obtenerHorasDisponibles', ['fecha' => ':fecha', 'medico_id' => ':medico_id','paciente_id' => ':paciente_id']) }}"
                     .replace(':fecha', fechaSeleccionada)
-                    .replace(':medico_id', medicoId));
+                    .replace(':medico_id', medicoId)
+                    .replace(':paciente_id', $('#medicos').val()));
             // Realizar la solicitud AJAX para obtener las horas disponibles
             $.ajax({
                 type: "GET",
-                url: "{{ route('ruta.obtenerHorasDisponibles', ['fecha' => ':fecha', 'medico_id' => ':medico_id']) }}"
+                url: "{{ route('paciente.obtenerHorasDisponibles', ['fecha' => ':fecha', 'medico_id' => ':medico_id','paciente_id' => ':paciente_id']) }}"
                     .replace(':fecha', fechaSeleccionada)
-                    .replace(':medico_id', medicoId),
+                    .replace(':medico_id', medicoId)
+                    .replace(':paciente_id', $('#medicos').val()),
                 success: function(response) {
                     console.log("s");
                     // Limpiar el select de horas

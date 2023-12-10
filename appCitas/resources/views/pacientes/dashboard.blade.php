@@ -43,6 +43,47 @@
             border-radius:5px  !important;
 
         }
+
+        .dataTables_wrapper .dataTables_filter input {
+        color: gray !important;
+        border-radius: 20px !important;
+        margin-left: 10px !important;
+        outline-offset: 0px !important;
+    }
+    .dataTables_wrapper .dataTables_filter input:focus{
+        border-radius: 20px !important;
+        margin-left: 10px !important;
+        outline-offset: 0px !important;
+        border: 1px solid gray !important;
+        outline: none !important;
+        padding: 5px 15px !important;
+    }
+    .dataTables_wrapper .dataTables_length select {
+
+        outline-offset: 0px !important;
+        outline: none !important;
+    }
+
+    input[type="search"]::-webkit-search-cancel-button {
+        display: none !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        border-radius: 50px !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+        border: 1px solid transparent  !important;
+        background: #a2e7c8 !important;
+        color:white !important;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+        cursor: default !important;
+        color: #666 !important;
+        border: 1px solid transparent !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
         
     </style>
 
@@ -122,9 +163,6 @@
                             </td>
                         </tr>
                     @empty
-                        <tr>
-                            <td colspan="4" class="text-center">No hay citas disponibles</td>
-                        </tr>
                     @endforelse
                 </tbody>
                 @endisset
@@ -152,6 +190,7 @@
                 "pageLength": 10,
                 "pagingType": "simple", // Cambiar a 'simple' para solo mostrar 'Anterior' y 'Siguiente'
                 "language": {
+                    emptyTable: "No hay citas disponibles.",
                     "paginate": {
                         "previous": "Anterior",
                         "next": "Siguiente"

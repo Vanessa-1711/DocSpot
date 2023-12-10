@@ -89,8 +89,9 @@ class MedicoController extends Controller
 
 
         return view('medico.crear_cita', [
-            'medico' => $paciente,
-            'medicosDelMismoHospital' => $pacientes
+            'paciente' => $paciente,
+            'medico_id'=>$medico_id->id,
+            'pacientesDelMismoHospital' => $pacientes
         ]);
     }
 
@@ -117,7 +118,7 @@ class MedicoController extends Controller
         }
     }
 
-    public function obtenerHorasDisponibles($fecha, $medico_id)
+    public function obtenerHorasDisponibles($fecha, $medico_id, $paciente_id)
     {
         $fechaSeleccionada = $fecha;
         
@@ -146,9 +147,6 @@ class MedicoController extends Controller
         $citas_medico = Citas::where('medico_id', $medico_id)
         ->whereDate('fecha', $fechaSeleccionada)
         ->get();
-
-        $paciente_id = auth()->user()->id;
-        $paciente_id = Paciente::where('user_id', $paciente_id)->value('id');
 
 
         $citasPaciente = Citas::where('paciente_id', $paciente_id)
@@ -196,12 +194,44 @@ class MedicoController extends Controller
 
         return response()->json($horasDisponibles);
     }
+    public function guardarCita(Request $request)
+    {
+        // Validación de datos
+        $request->validate([
+            'medicos' => 'required',
+            'medico_id' => 'required',
+            'fecha' => 'required',
+            'hora' => 'required',
+        ], [
+            'medicos.required' => 'El campo paciente es obligatorio.',
+            'medico_id.required' => 'El campo médico_id  es obligatorio.',
+            'fecha.required' => 'El campo fecha es obligatorio.',
+            'hora.required' => 'El campo hora es obligatorio.',
+        ]);
+        $paciente_id = $request->input('medicos');
+
+
+        // Guardar la cita en la base de datos
+        $cita = new Citas([
+            'medico_id' => $request->input('medico_id'),
+            'fecha' => $request->input('fecha'),
+            'hora' => $request->input('hora'),
+            'estado'=>0,
+            'paciente_id'=>$paciente_id,
+        ]);
+
+        $cita->save();
+
+        // Puedes redirigir a una página de confirmación o a donde necesites después de guardar la cita
+        return redirect()->route('medico.citas',['medico' => auth()->user()->id]);
+    }
 
     public function citasMedico($medicoId)
     {
+        
         $medicoId = Medico::where('user_id', $medicoId)->value('id');
         $medico = Medico::with(['citas.paciente.pacienteHospital'])->findOrFail($medicoId);
-        return view('medico.citas', ['medico' => $medico]);
+        return view('medico.citas', ['medico' => $medico,'paciente_id' => $medicoId ]);
     }
 
     // Método para eliminar la cita

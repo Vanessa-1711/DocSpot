@@ -109,7 +109,8 @@
                                 data-cita-id="{{ $cita->id }}"
                                 data-cita-fecha="{{ $cita->fecha }}"
                                 data-cita-hora="{{ $cita->hora }}"
-                                data-cita-medico-id="{{ $cita->paciente->id }}">
+                                data-cita-medico-id="{{ $paciente_id }}"
+                                data-cita-paciente-id="{{ $cita->paciente->id }}">
                                 <i class="fas fa-edit" style="color: #9FC9D7;"></i>
                             </button>
                             <!-- Formulario para eliminar la cita -->
@@ -153,6 +154,8 @@
                             <label for="hora{{ $cita->id }}" class="form-label">Hora actual de la cita</label>
                             <input type="time" class="form-control" id="hora{{ $cita->id }}"  value="{{ \Carbon\Carbon::parse($cita->hora)->format('H:i') }}" readonly>
                         </div>
+                        <input name="paciente_id"  id="paciente_id" value="{{$paciente_id}}" style="display:none">
+
 
                         <div class="form-group" style="margin-top:2.5rem; margin-bottom:3.5rem">
                             <label for="fecha" class="subtitulo">Seleccionar nueva fecha</label>
@@ -193,13 +196,14 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
-function cargarHorasDisponibles(fechaSeleccionada, medicoId, id) {
+function cargarHorasDisponibles(fechaSeleccionada, medicoId, id,pacienteId) {
 // Realiza la solicitud AJAX para obtener las horas disponibles
     $.ajax({
         type: "GET",
-        url: "{{ route('ruta.obtenerHorasDisponibles', ['fecha' => ':fecha', 'medico_id' => ':medico_id']) }}"
+        url: "{{ route('paciente.obtenerHorasDisponibles', ['fecha' => ':fecha', 'medico_id' => ':medico_id', 'paciente_id' => ':paciente_id']) }}"
             .replace(':fecha', fechaSeleccionada)
-            .replace(':medico_id', medicoId),
+            .replace(':medico_id', medicoId)
+            .replace(':paciente_id', pacienteId),
         success: function(response) {
             console.log(response);
             // Limpiar el select de horas
@@ -215,7 +219,7 @@ function cargarHorasDisponibles(fechaSeleccionada, medicoId, id) {
     });
 }
 
-function cargarFechasDisponibles(medico_id, id) {
+function cargarFechasDisponibles(medico_id, id, paciente_id) {
     console.log('#fecha_flat:fecha_flat'.replace(':fecha_flat', id));
     // Mostrar mensaje de carga
     $('#fecha_flat:fecha_flat'.replace(':fecha_flat', id)).val('Cargando fechas disponibles...');
@@ -243,15 +247,16 @@ function cargarFechasDisponibles(medico_id, id) {
         // Realizar la solicitud AJAX para obtener las horas disponibles
         $.ajax({
             type: "GET",
-            url: "{{ route('ruta.obtenerHorasDisponibles', ['fecha' => ':fecha', 'medico_id' => ':medico_id']) }}"
+            url: "{{ route('paciente.obtenerHorasDisponibles', ['fecha' => ':fecha', 'medico_id' => ':medico_id', 'paciente_id' => ':paciente_id']) }}"
                 .replace(':fecha', fecha)
-                .replace(':medico_id', medico_id),
+                .replace(':medico_id', medico_id)
+                .replace(':paciente_id', paciente_id),
             success: function(response) {
                 console.log(response);
                 if (!response || response.length === 0) {
                     // Si no hay horas disponibles, agregar la fecha al array
                     fechasSinHorasDisponibles.push(fecha);
-                    console.log("{{ route('ruta.obtenerHorasDisponibles', ['fecha' => ':fecha', 'medico_id' => ':medico_id']) }}".replace(':fecha', fecha).replace(':medico_id',medico_id));
+                    console.log("{{ route('paciente.obtenerHorasDisponibles', ['fecha' => ':fecha', 'medico_id' => ':medico_id', 'paciente_id' => ':paciente_id']) }}".replace(':fecha', fecha).replace(':medico_id',medico_id).replace(':paciente_id',paciente_id));
                 }
             },
             error: function(error) {
@@ -264,8 +269,7 @@ function cargarFechasDisponibles(medico_id, id) {
                     $('#fecha_flat:fecha_flat'.replace(':fecha_flat', id)).val('');
                     
                     // Configurar Flatpickr con las fechas sin horas disponibles
-                    configurarFlatpickr(fechasSinHorasDisponibles,id,medico_id);
-                    console.log("aaaaa");
+                    configurarFlatpickr(fechasSinHorasDisponibles,id,medico_id,paciente_id);
                    
 
                     Swal.close();
@@ -284,7 +288,7 @@ function cargarFechasDisponibles(medico_id, id) {
 }
 
 // Función para configurar Flatpickr con las fechas sin horas disponibles
-function configurarFlatpickr(fechasSinHorasDisponibles,id, medico_id) {
+function configurarFlatpickr(fechasSinHorasDisponibles,id, medico_id, paciente_id) {
     $('#fecha_flat:fecha_flat'.replace(':fecha_flat', id)).flatpickr({
         enableTime: false,
         dateFormat: "Y-m-d",
@@ -294,7 +298,7 @@ function configurarFlatpickr(fechasSinHorasDisponibles,id, medico_id) {
         disable: fechasSinHorasDisponibles, // Desactivar las fechas sin horas disponibles
         onChange: function(selectedDates, dateStr, instance) {
             // Al cambiar la fecha, obtén las horas disponibles
-            cargarHorasDisponibles(dateStr, medico_id, id);
+            cargarHorasDisponibles(dateStr, medico_id, id,paciente_id);
         }
     });
 }
@@ -303,16 +307,18 @@ document.addEventListener('DOMContentLoaded', function () {
     // Obtener todos los botones de clase "btn-hover"
     const buttons = document.querySelectorAll('.btn-hover');
     var medicoId="";
+    var paciente_id="";
     // Iterar sobre cada botón y agregar un listener para capturar el clic
     buttons.forEach(button => {
         button.addEventListener('click', function (event) {
             // Obtener el ID del médico del botón clickeado
             medicoId = this.getAttribute('data-cita-medico-id');
+            paciente_id = this.getAttribute('data-cita-paciente-id');
             id= this.getAttribute('data-cita-id');
             
             // Realizar acciones con el ID del médico obtenido
             console.log('Se hizo clic en un botón de cita. ID del médico:', medicoId);
-            cargarFechasDisponibles(medicoId,id);
+            cargarFechasDisponibles(medicoId,id,paciente_id);
             // Otras acciones...
         });
     });
@@ -322,15 +328,17 @@ document.addEventListener('DOMContentLoaded', function () {
     $('#fecha_flat').change(function() {
         console.log("aqui");
         var fechaSeleccionada = $(this).val();
-        console.log("{{ route('ruta.obtenerHorasDisponibles', ['fecha' => ':fecha', 'medico_id' => ':medico_id']) }}"
+        console.log("{{ route('paciente.obtenerHorasDisponibles', ['fecha' => ':fecha', 'medico_id' => ':medico_id', 'paciente_id' => ':paciente_id']) }}"
                 .replace(':fecha', fechaSeleccionada)
-                .replace(':medico_id', medicoId));
+                .replace(':medico_id', medicoId)
+                .replace(':paciente_id', paciente_id));
         // Realizar la solicitud AJAX para obtener las horas disponibles
         $.ajax({
             type: "GET",
-            url: "{{ route('ruta.obtenerHorasDisponibles', ['fecha' => ':fecha', 'medico_id' => ':medico_id']) }}"
+            url: "{{ route('paciente.obtenerHorasDisponibles', ['fecha' => ':fecha', 'medico_id' => ':medico_id', 'paciente_id' => ':paciente_id'])  }}"
                 .replace(':fecha', fechaSeleccionada)
-                .replace(':medico_id', medicoId),
+                .replace(':medico_id', medicoId)
+                .replace(':paciente_id', paciente_id),
             success: function(response) {
                 console.log("s");
                 // Limpiar el select de horas
