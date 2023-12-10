@@ -28,4 +28,9 @@ class Paciente extends Model
     {
         return $this->hasMany(Citas::class, 'paciente_id');
     }
+    
+    public function pacienteHospital()
+    {
+        return $this->hasOne(PacienteHospital::class, 'paciente_id');
+    }
 }

@@ -74,7 +74,7 @@ Route::delete('hospitales/borrar/{pacienteHospital}', [HospitalController::class
 
 Route::get('/crear_cita/{doctor}', [PacienteController::class, 'crearCita'])->name('citas.crear');
 Route::get('/obtenerHorasDisponibles/{fecha}/{medico_id}', [PacienteController::class, 'obtenerHorasDisponibles'])->name('ruta.obtenerHorasDisponibles');
-Route::post('/crear_cita/pacientes/guardar', [PacienteController::class, 'guardarCita'])->name('citas.guardar');
+Route::post('crear_cita/paciente', [PacienteController::class, 'guardarCita'])->name('citas.guardar');
 
 
 //Hospital-Doctores
@@ -99,4 +99,9 @@ Route::delete('/paciente/borrar/{pacienteHospital}', [HospitalController::class,
 Route::get('/medicos/pacientes', [MedicoController::class, 'index_pacientes'])->name('medico.pacientes');
 Route::get('/medicos/vermasPaciente/{id}', [MedicoController::class, 'verMasPaciente'])->name('medico.vermasPaciente');
 Route::get('/crear_cita/paciente/{doctor}', [MedicoController::class, 'crearCita'])->name('citaspaciente.crear');
-// Route::post('crear_cita/guardar', [MedicoController::class, 'guardarCita'])->name('citaspaciente.guardar');
+Route::post('crear_cita/medico', [MedicoController::class, 'guardarCita'])->name('citaspaciente.guardar');
+
+Route::get('/medicos/{medico}/citas', [MedicoController::class, 'citasMedico'])->name('medico.citas');
+Route::delete('/citasM/{cita}/eliminar', [MedicoController::class, 'eliminarCita'])->name('citas.eliminar');
+Route::get('/citasM/{cita}/editar', [MedicoController::class, 'editarCita'])->name('citas.editar');
+Route::put('/citasM/{cita}', [MedicoController::class, 'actualizarCitaM'])->name('citas.actualizarM');
