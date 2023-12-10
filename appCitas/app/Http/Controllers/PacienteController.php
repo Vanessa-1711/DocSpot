@@ -10,9 +10,6 @@ use App\Models\Horario;
 use App\Models\PacienteHospital;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use DateTime;
 
 class PacienteController extends Controller
 {   
@@ -53,6 +50,7 @@ class PacienteController extends Controller
             'citas' => $citas
         ]);
     }
+
     public function asociarHospital($hospital, $nss)
     {
         $pacienteId = auth()->user()->id;
@@ -74,7 +72,6 @@ class PacienteController extends Controller
         }
             
     }
-
 
     public function verMasHospital($id)
     {
@@ -110,6 +107,7 @@ class PacienteController extends Controller
             'horarios' => $horarios,
         ]);
     }
+
     public function crearCita($medicoId)
     {
         // Encuentra al médico por su ID
@@ -157,7 +155,6 @@ class PacienteController extends Controller
         // Puedes redirigir a una página de confirmación o a donde necesites después de guardar la cita
         return redirect()->route('pacientes.citas',['paciente' => auth()->user()->id]);
     }
-
 
     private function traducirDiaSemana($dia)
     {
@@ -261,8 +258,6 @@ class PacienteController extends Controller
 
         return response()->json($horasDisponibles);
     }
-
-   
 
     public function hospitales()
     {

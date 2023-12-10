@@ -100,3 +100,8 @@ Route::get('/medicos/pacientes', [MedicoController::class, 'index_pacientes'])->
 Route::get('/medicos/vermasPaciente/{id}', [MedicoController::class, 'verMasPaciente'])->name('medico.vermasPaciente');
 Route::get('/crear_cita/paciente/{doctor}', [MedicoController::class, 'crearCita'])->name('citaspaciente.crear');
 Route::post('crear_cita/medico', [MedicoController::class, 'guardarCita'])->name('citaspaciente.guardar');
+
+Route::get('/medicos/{medico}/citas', [MedicoController::class, 'citasMedico'])->name('medico.citas');
+Route::delete('/citasM/{cita}/eliminar', [MedicoController::class, 'eliminarCita'])->name('citas.eliminar');
+Route::get('/citasM/{cita}/editar', [MedicoController::class, 'editarCita'])->name('citas.editar');
+Route::put('/citasM/{cita}', [MedicoController::class, 'actualizarCitaM'])->name('citas.actualizarM');
