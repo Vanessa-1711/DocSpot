@@ -114,7 +114,7 @@
                                 <i class="fas fa-edit" style="color: #9FC9D7;"></i>
                             </button>
                             <!-- Formulario para eliminar la cita -->
-                            <form action="{{ route('citas.eliminar', $cita->id) }}" method="POST" class="form-eliminar-cita">
+                            <form action="{{ route('citas.eliminarM', $cita->id) }}" method="POST" class="form-eliminar-cita">
                                 @csrf
                                 @method('DELETE')
                                 <button type="button" class="btn btn-hover eliminar-cita-btn" >

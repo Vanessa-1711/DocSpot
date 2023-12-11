@@ -102,7 +102,7 @@ Route::get('/crear_cita/paciente/{doctor}', [MedicoController::class, 'crearCita
 Route::post('crear_cita/medico', [MedicoController::class, 'guardarCita'])->name('citaspaciente.guardar');
 
 Route::get('/medicos/{medico}/citas', [MedicoController::class, 'citasMedico'])->name('medico.citas');
-Route::delete('/citasM/{cita}/eliminar', [MedicoController::class, 'eliminarCita'])->name('citas.eliminar');
-Route::get('/citasM/{cita}/editar', [MedicoController::class, 'editarCita'])->name('citas.editar');
+Route::delete('/citasM/{cita}/eliminar', [MedicoController::class, 'eliminarCita'])->name('citas.eliminarM');
+Route::get('/citasM/{cita}/editar', [MedicoController::class, 'editarCita'])->name('citas.editarM');
 Route::put('/citasM/{cita}', [MedicoController::class, 'actualizarCitaM'])->name('citas.actualizarM');
 Route::get('/obtenerHorasDisponibles/{fecha}/{medico_id}/{paciente_id}', [MedicoController::class, 'obtenerHorasDisponibles'])->name('paciente.obtenerHorasDisponibles');
